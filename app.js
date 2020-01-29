@@ -69,7 +69,7 @@ class Database {
     this.db_path = path
     this.db = null
     this.sql_config = {
-      locateFile: filename => `/dist/${filename}`
+      locateFile: filename => `./dist/${filename}`
     }
   }
 

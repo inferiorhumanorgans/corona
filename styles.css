@@ -1,18 +1,18 @@
 @font-face {
   font-family: "Palanquin";
   font-weight: 300;
-  src: url(/dist/Palanquin-Thin.ttf) format("truetype");
+  src: url(./dist/Palanquin-Thin.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Palanquin";
   font-weight: 500;
-  src: url(/dist/Palanquin-Regular.ttf) format("truetype");
+  src: url(./dist/Palanquin-Regular.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "DejaVu Mono";
-  src: url(/dist/DejaVuSansMono.ttf) format("truetype");
+  src: url(./dist/DejaVuSansMono.ttf) format("truetype");
 }
 
 html {
