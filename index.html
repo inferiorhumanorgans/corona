@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>2019-nCoV visualizations</title>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <script lang="javascript" src="/dist/sql-wasm.js"></script>
+    <script lang="javascript" src="/dist/d3.v5.min.js"></script>
+    <script lang="javascript" src="/dist/moment.min.js"></script>
+    <script lang="javascript" src="/dist/moment-strftime.js"></script>
+    <script lang="javascript" src="/dist/topojson.min.js"></script>
+    <script lang="javascript" src="queries.js"></script>
+    <script lang="javascript" src="app.js"></script>
+
+    <link rel="stylesheet" type="text/css" href = "styles.css" />
+
+    <script lang="javascript">
+      const SETTINGS = {
+        locale: 'en-US',
+        db_path: '/data/nCoV.sqlite3',
+      }
+
+      let db = new Database(SETTINGS.db_path)
+      let chart;
+
+      db.load_data().then((foo) => {
+        // Set up our chart
+        console.log("Setting up chart")
+
+        chart = new StackedLine()
+
+        window.onresize = function() {
+          chart.set_dimensions()
+          chart.draw()
+        }
+
+        chart.set_profile(db, 'china')
+        // chart.draw()
+      })
+</script>
+  </head>
+  <body>
+    <svg></svg>
+    <p style="padding-left: 20px; margin-top: 0">
+      Data sourced from Johns Hopkins University's <a href="https://systems.jhu.edu/" target="_blank">Center for Systems Science and Engineering</a>.
+      All times local to U.S. East Coast.
+    </p>
+    <div class="tooltip">
+      <span class="tooltip_header">As of <span class="tooltip_updated_at"></span>:</span><br>
+      <ul class="tooltip_series">
+      </ul>
+    </div>
+  </body>
+</html>
