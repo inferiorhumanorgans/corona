@@ -185,7 +185,7 @@ class StackedLine {
 
     let last = [...this.data].pop()
     let last_date = moment(last.x_label).strftime("%b %d, %Y %H:%M")
-    this.title.text(`2019-nCoV Incidence ${this.chart_region} as of ${last_date}`)
+    this.title.html(`2019-nCoV Incidence <tspan class='toggle_region' onclick='javascript:toggle_region()'>${this.chart_region}</tspan> as of ${last_date}`)
     
     document.querySelector('text.title').style=`font-size: ${this.fullHeight * this.titleFactor}px`;
     document.querySelector('text.subtitle').style=`font-size: ${this.fullHeight * this.subtitleFactor}px`;
@@ -328,6 +328,7 @@ class StackedLine {
         throw(`Profile '${profile}' not found`)
       }
     }
+    this.profile = profile
     this.draw()
     return true
   }

@@ -14,6 +14,17 @@
     <link rel="stylesheet" type="text/css" href = "styles.css" />
 
     <script lang="javascript">
+      function toggle_region(event) {
+        switch (chart.profile) {
+          case "china":
+            chart.set_profile(db, "all")
+            return;
+          case "all":
+            chart.set_profile(db, "china")
+            return;
+        }
+      }
+
       const SETTINGS = {
         locale: 'en-US',
         db_path: './data/nCoV.sqlite3',

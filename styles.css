@@ -242,3 +242,7 @@ div.tooltip {
     font-size: 6pt
   }
 }
+
+.toggle_region {
+  text-decoration: underline;
+}
