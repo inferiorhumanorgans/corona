@@ -262,13 +262,6 @@ class StackedLine {
   }
 
   tooltip_handler(chart) {
-    chart.tooltip
-      .interrupt()
-      .style("visibility", "visible")
-      .style("opacity", 1)
-      .style("top", `${d3.event.pageY + 5}px`)
-      .style("left", `${d3.event.pageX + 10}px`)
-
     let bisectDate = chart.bisectDate;
     // https://bl.ocks.org/alandunning/cfb7dcd7951826b9eacd54f0647f48d3
     let actual_date = chart.x.invert(d3.mouse(this)[0])
@@ -298,6 +291,27 @@ class StackedLine {
       })
 
     chart.tooltip.select(".tooltip_updated_at").text(datum.x_label)
+
+    let bounds = chart.tooltip.node().getBoundingClientRect();
+
+    let pageX = d3.event.pageX;
+    let pageY = d3.event.pageY;
+    let xPos = pageX + 10;
+    let yPos;
+
+    if ((5 + pageY + bounds.height) > window.innerHeight) {
+      yPos = window.innerHeight - 10 - bounds.height
+    } else {
+      yPos = 5 + pageY
+    }
+
+    chart.tooltip
+      .interrupt()
+      .style("visibility", "visible")
+      .style("opacity", 1)
+      .style("top", `${yPos}px`)
+      .style("left", `${xPos}px`)
+
     chart.tooltip.style("visibility", "visible")
   }
 
