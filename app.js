@@ -342,15 +342,12 @@ class Mapper {
     this.margin = {top: 10, right: 20, bottom: 40, left: 20},
 
     this.map_colors = d3.scaleCluster()
-    // this.map_colors = d3.scaleQuantize()
-    // this.map_colors = d3.scaleQuantile()
 
     this.map = d3.select("svg.plot.map")
         .attr("width", this.width)
         .attr("height", this.height)
         .style("left", window.innerWidth * 0.5)
         .append("g")
-        // .attr("transform", "translate(-50, 0)")
 
     this.tooltip = d3.select(".map.tooltip")
 
