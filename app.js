@@ -755,6 +755,18 @@ class Mapper {
 }
 
 const CHINA_PROVINCES = {
+  "beijing": {
+    "name": "Beijing (北京)",
+  },
+  "chongqing": {
+    "name": "Chongqing (重庆)",
+  },
+  "shanghai": {
+    "name": "Shanghai (上海)",
+  },
+  "tianjin": {
+    "name": "Tianjin (天津)",
+  },
   "guangdong": {
      "name": "Guangdong (广东)",
      "population": 111690000,
