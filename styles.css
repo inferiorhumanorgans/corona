@@ -365,3 +365,7 @@ h2 {
   font-weight: normal !important;
   color: #1b191d;
 }
+
+.maptick {
+  stroke: #1b191d;
+}
