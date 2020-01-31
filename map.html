@@ -3,6 +3,9 @@
   <head>
     <title>2019-nCoV visualizations</title>
     <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+
+    <link rel="stylesheet" type="text/css" href = "styles.css" />
+
     <script lang="javascript" src="./dist/sql-wasm.js"></script>
     <script lang="javascript" src="./dist/d3.v5.min.js"></script>
     <script lang="javascript" src="./dist/d3-scale-cluster.min.js"></script>
@@ -11,8 +14,6 @@
     <script lang="javascript" src="./dist/topojson.min.js"></script>
     <script lang="javascript" src="./queries.js"></script>
     <script lang="javascript" src="./app.js"></script>
-
-    <link rel="stylesheet" type="text/css" href = "styles.css" />
 
     <script lang="javascript">
       function toggle_region(event) {
@@ -84,7 +85,10 @@
           <span class="h-space">&nbsp;</span>
 
           <span class="enabled">other:</span>
-            <a href="./">area charts</a>
+          <a href="./">area charts</a>
+          <span class="h-space">&nbsp;</span>
+
+          Hit <span style="font-family: 'DejaVu Mono'">?</span> for more info.
         </div>
       </center>
     </div>
@@ -92,5 +96,7 @@
       <span class="tooltip-header"><span class="tooltip-province"></span></span><br>
       <span class="tooltip-count"></span> <span class="tooltip-category"></span></span>
     </div>
+
+    <div class="about"></div>
   </body>
 </html>

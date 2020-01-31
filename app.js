@@ -840,3 +840,42 @@ const CHINA_PROVINCES = {
      "population": 5980000,
   },
 }
+
+window.addEventListener("keydown", event => {
+  if (event.metaKey || event.altKey || event.ctrlKey) {
+    return
+  }
+
+  if (event.key == "?") {
+    d3.select(".about").style("display", "block")
+    return
+  } else if (event.key == "Escape") {
+    d3.select(".about").style("display", null)
+    return
+  }
+
+})
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  d3.select(".about").html(`
+    <a href="javascript:void(0)" onclick="javascript:{d3.select('.about').style('display', null)}">[x]</a>
+    <p>
+      <span style="font-weight: bold">About this map:</span><br>
+      First and foremost this is a casual attempt at using <a href="https://d3js.org/" target="_blank">D3.js</a> and learning more about it.
+      These visulizations are intended for entertainment purposes only.  I've attempted to make this as accurate and straightforward as possible, but they're not perfect.
+      For instance, the case fatality rate (CFR) is impossible to know precisely (especially towards the beginning of a rapidly evolving pandemic).  <a href="https://pdfs.semanticscholar.org/ebf2/48c9fc0a1a23d1778b94083319aa995e34f4.pdf" target="_blank">Ghani, et al.</a> discussed
+      a variety of methods for estimating the CFR and I've picked a simple one that only utilizes known outcomes: <span style="font-family: 'DejaVu Mono'">deaths / (deaths + recoveries)</span>.
+      If there are glaring issues feel free to open an issue on GitHub.
+    </p>
+    <p>
+      The data used comes from a variety of places.  Epidemiological comes courtesy of Johns Hopkins University's <a href="https://systems.jhu.edu/" target="_blank">Center for Systems Science and Engineering</a>.
+      <a href="https://gadm.org/data.html">GADM</a> spatial data was used to create the maps.  Wikipedia was also used for a variety of information including: <a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes" target="_blank">ISO 3166 country codes</a>, population estimates for China, and <a href="https://en.wikipedia.org/wiki/Provinces_of_China#Greater_administrative_areas" target="_blank">political boundaries within China</a>.  The open source font families <a href="https://dejavu-fonts.github.io/" target="_blank">DejaVu</a> and <a href="https://github.com/VanillaandCream/Palanquin/" target="_blank">Palanquin</a> allow for a consistent look across different platforms.
+    </p>
+    <p>
+      While the intent is to be mostly standards compliant, this site was not made with mobile devices in mind.  It's almost usable, but not quite.  It is tested in <a href="https://www.mozilla.org/firefox" target="_blank">Firefox</a>, but should work with other modern browsers.  If an on-screen item is underlined, click on it and something magical should happen.  A handful of keyboard shortcuts are also available.  The left and right arrows move the selected point in time back and forward respectively.  Hitting escape will close this lightbox.
+    </p>
+    <p>
+      Is this too morbid?  Click <a href="https://www.thefarside.com/" target="_blank">here</a> for cuddly cats and cute farm animals.
+    </p>
+  `)
+});
