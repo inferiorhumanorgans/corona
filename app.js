@@ -308,7 +308,7 @@ class StackedArea {
     return true
   }
 
-constructor() {
+  constructor() {
     this.minTime = moment("2020-01-22 00:00")
     this.maxTime = moment("2020-02-01 00:00")
 
@@ -437,6 +437,29 @@ class Mapper {
       .call(brush)
       // .call(brush.move, this.brush_bounds(center).map(x))
     d3.selectAll(".brush .handle").remove()
+
+    this.map.insert("g")
+      .attr("class", "topo-group")
+
+
+    window.addEventListener("keydown", event => {
+      if (event.shiftKey || event.metaKey || event.altKey || event.ctrlKey) {
+        return
+      }
+
+      if (event.key === "ArrowLeft") {
+        this.prev_x()
+      } else if (event.key === "ArrowRight") {
+        this.next_x()
+      } else if (event.key === "Home") {
+        let x_value = moment(Object.keys(this.bars)[0]).toDate();
+        this.set_x(x_value)
+      } else if (event.key === "End") {
+        let x_value = moment(Object.keys(this.bars).pop()).toDate();
+        console.log(x_value)
+        this.set_x(x_value)
+      }
+    });
   }
 
   brush_bounds(d) {
@@ -475,19 +498,21 @@ class Mapper {
   }
 
   draw_features() {
+    let foo = this.map.select("g.topo-group").attr("class", "topo-group")
+
     for (let feature of this.features) {
-      this.draw_feature(feature)
+      this.draw_feature(feature, foo)
     }
   }
 
-  draw_feature(feature) {
+  draw_feature(feature, node) {
     let topo = topojson.feature(this.topo_data, this.topo_data.objects[feature])
 
     let tooltip_handler = this.tooltip_handler
     let tooltip_hide = this.tooltip_hide
     let tooltip = this.tooltip
 
-    this.map.selectAll(`path.${feature}`)
+    node.selectAll(`path.${feature}`)
         .data(topo.features)
         .enter()
         .append("path")
@@ -540,6 +565,11 @@ class Mapper {
     let x = Object.keys(this.bars)
     let idx = x.indexOf(this.x_label)
     let prev_idx = idx - 1
+
+    if (prev_idx < 0) {
+      return
+    }
+
     this.set_x(x[prev_idx])
     this.refresh()
   }
@@ -548,6 +578,11 @@ class Mapper {
     let x = Object.keys(this.bars)
     let idx = x.indexOf(this.x_label)
     let next_idx = idx + 1
+
+    if (next_idx >= x.length) {
+      return
+    }
+
     this.set_x(x[next_idx])
     this.refresh()
   }
