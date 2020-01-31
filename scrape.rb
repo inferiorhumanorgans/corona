@@ -171,6 +171,10 @@ def get_country_code(country, province)
     return "FI"
   when /United Arab Emirates/i
     return "AE"
+  when /India/i
+    return "IN"
+  when /Italy/i
+    return "IT"
   else
     STDERR.puts "Warning: couldn't identify #{country}"
     return country
