@@ -68,7 +68,8 @@
 </script>
   </head>
   <body>
-    <h2 style="text-align: center">2019-nCoV Cases in China <span class="x-date"></span></h2>
+    <h2 style="text-align: center">2019-nCoV Cases in China</h2>
+    <h3><span class="x-date"></span></h3>
     <div style="width: 100%">
       <svg class="plot map"></svg>
     </div>
@@ -76,20 +77,20 @@
       <center>
         <ul class="map-legend"></ul>
         <div class="map-controls">
-          type: [<a class="control confirmed" href="javascript:map.set_field('confirmed');map.refresh()">confirmed cases</a>]
+          <span class="enabled">type:</span> [<a class="control confirmed" href="javascript:map.set_field('confirmed');map.refresh()">confirmed cases</a>]
           [<a class="control deaths" href="javascript:map.set_field('deaths');map.refresh()">deaths</a>]
           [<a class="control recovered" href="javascript:map.set_field('recovered');map.refresh()">recoveries</a>]
-          date:
-            <a class="control prev" href="javascript:map.prev_x()">&lt;</a>
-            <a class="control next" href="javascript:map.next_x()">&gt;</a>
-          other:
+          [<a class="control death_ratio" href="javascript:map.set_field('death_ratio');map.refresh()">case fatality ratio</a>]
+          <span class="h-space">&nbsp;</span>
+
+          <span class="enabled">other:</span>
             <a href="./">area charts</a>
         </div>
       </center>
     </div>
     <div class="map tooltip">
       <span class="tooltip-header"><span class="tooltip-province"></span></span><br>
-      <span class="tooltip-count"></span> <span class="tooltip_category"></span> as of <span class="tooltip_updated_at"></span>
+      <span class="tooltip-count"></span> <span class="tooltip-category"></span></span>
     </div>
   </body>
 </html>

@@ -361,11 +361,19 @@ rect {
   background: none !important;
 }
 
-h2 {
-  font-weight: normal !important;
+h2, h3 {
+  font-weight: 100 !important;
   color: #1b191d;
+  text-align: center;
+  margin: 0;
+  padding: 0;
 }
 
 .maptick {
   stroke: #1b191d;
+}
+
+.h-space {
+  display: inline-block;
+  width: 1.75em;
 }

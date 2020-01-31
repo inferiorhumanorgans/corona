@@ -12,15 +12,27 @@ Queries.ALL_REGIONS = `
 
 Queries.CHINA_PROVINCIAL = `
   SELECT
-    updated_at AS x_label,
+    x_label,
     province,
     confirmed,
     suspected,
     recovered,
-    deaths
-  FROM cases
-  WHERE country = 'CN'
-  ORDER BY updated_at
+    deaths,
+    known,
+    (CAST(deaths AS REAL) / CAST(known AS REAL)) AS death_ratio
+  FROM
+    ( SELECT
+      updated_at AS x_label,
+      province,
+      IFNULL(confirmed, 0) AS confirmed,
+      IFNULL(suspected, 0) AS suspected,
+      IFNULL(recovered, 0) AS recovered,
+      IFNULL(deaths, 0) AS deaths,
+      (IFNULL(deaths, 0) + IFNULL(recovered, 0)) AS known
+    FROM cases
+    WHERE country = 'CN'
+    ORDER BY updated_at
+  )
 `
 
 Queries.CHINA_REGIONAL = `

@@ -589,7 +589,16 @@ class Mapper {
   set_field(field) {
     this.field = field
 
-    d3.selectAll(".tooltip_category").text(field)
+    let field_description;
+    switch (field) {
+      case "death_ratio":
+        field_description = "estimated case fatality ratio"
+        break;
+      default:
+        field_description = field
+        break
+    }
+    d3.selectAll(".tooltip-category").text(field_description)
 
     d3.selectAll(`.control`)
       .classed("enabled", false)
@@ -603,7 +612,7 @@ class Mapper {
     }, [])
 
     // this.map_colors.domain([0, d3.max(all_values)])
-    this.map_colors.domain(all_values)      .range([
+    this.map_colors.domain(all_values).range([
       "level1",
       "level2",
       "level3",
@@ -619,7 +628,7 @@ class Mapper {
   }
 
   refresh() {
-    console.log("Refresh map")
+    console.log("Refresh map", this.x_label)
 
     const field = this.field
     const bars = this.bars[this.x_label]
@@ -641,18 +650,34 @@ class Mapper {
       .enter()
       .append("li")
       .html(function(d, i) {
-        let bounds = [lower_bound, quantiles[i]]
+        if (field.match(/_ratio$/)) {
+          let bounds = [lower_bound, quantiles[i]]
 
-        lower_bound = Math.round(quantiles[i])
+          lower_bound = quantiles[i]
 
-        let key = `<div class="legend key ${range[i]}">&nbsp</div>`
-        if (bounds[1]) {
-          let lower = formatNumber(Math.round(bounds[0]))
-          let upper = formatNumber(Math.round(bounds[1]))
-          return `${key}${lower}–${upper}`
+          let key = `<div class="legend key ${range[i]}">&nbsp</div>`
+          if (bounds[1]) {
+            let lower = formatNumber(bounds[0], {style: "percent"})
+            let upper = formatNumber(bounds[1], {style: "percent"})
+            return `${key}${lower}–${upper}`
+          } else {
+            let bound = formatNumber(bounds[0], {style: "percent"})
+            return `${key}${bound}`
+          }
         } else {
-          let bound = formatNumber(Math.round(bounds[0]))
-          return `${key}${bound}+`
+          let bounds = [lower_bound, quantiles[i]]
+
+          lower_bound = Math.round(quantiles[i])
+
+          let key = `<div class="legend key ${range[i]}">&nbsp</div>`
+          if (bounds[1]) {
+            let lower = formatNumber(Math.round(bounds[0]))
+            let upper = formatNumber(Math.round(bounds[1]))
+            return `${key}${lower}–${upper}`
+          } else {
+            let bound = formatNumber(Math.round(bounds[0]))
+            return `${key}${bound}+`
+          }
         }
       })
 
@@ -660,6 +685,7 @@ class Mapper {
       let province = bar.province.toLocaleLowerCase()
 
       d3.select(`.province.${province}`)
+        .attr("data-field", field)
         .attr("data-count", bar[field])
         .attr("class", `topo province ${province} ${this.map_colors(bar[field])}`)
     }
@@ -698,7 +724,22 @@ class Mapper {
     }
 
     tooltip.selectAll(".tooltip-province").text(province.name)
-    tooltip.selectAll(".tooltip-count").text(formatNumber(node.attr("data-count")))
+
+    if (node.attr("data-field").match(/_ratio$/)) {
+      let value = node.attr("data-count")
+      let count
+
+      if (value) {
+        count = formatNumber(value, {style: "percent"})
+      } else {
+        count = "N/A"
+      }
+
+      tooltip.selectAll(".tooltip-count").text(count)
+    } else {
+      let count = formatNumber(node.attr("data-count"))
+      tooltip.selectAll(".tooltip-count").text(count)
+    }
 
     tooltip
       .interrupt()
