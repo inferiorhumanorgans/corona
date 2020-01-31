@@ -28,6 +28,7 @@
       const SETTINGS = {
         locale: 'en-US',
         db_path: './data/nCoV.sqlite3',
+        topo_path: './data/china-provinces.topo.json',
       }
 
       let db = new Database(SETTINGS.db_path)
@@ -37,7 +38,7 @@
         // Set up our chart
         console.log("Setting up chart")
 
-        chart = new StackedLine()
+        chart = new StackedArea()
 
         window.onresize = function() {
           chart.set_dimensions()
@@ -45,18 +46,18 @@
         }
 
         chart.set_profile(db, 'china')
-        // chart.draw()
+        chart.draw()
       })
 </script>
   </head>
   <body>
-    <svg></svg>
+    <svg class="plot chart"></svg>
     <p style="padding-left: 20px; margin-top: 0">
       Data sourced from Johns Hopkins University's <a href="https://systems.jhu.edu/" target="_blank">Center for Systems Science and Engineering</a>.
-      All times local to U.S. East Coast.
+      All times local to U.S. East Coast.  Maps are <a href="map.html">over here</a>.
     </p>
-    <div class="tooltip">
-      <span class="tooltip_header">As of <span class="tooltip_updated_at"></span>:</span><br>
+    <div class="chart tooltip">
+      <span class="tooltip-header">As of <span class="tooltip_updated_at"></span>:</span><br>
       <ul class="tooltip_series">
       </ul>
     </div>

@@ -10,6 +10,19 @@ Queries.ALL_REGIONS = `
     GROUP BY x_label
     ORDER BY x_label;`
 
+Queries.CHINA_PROVINCIAL = `
+  SELECT
+    updated_at AS x_label,
+    province,
+    confirmed,
+    suspected,
+    recovered,
+    deaths
+  FROM cases
+  WHERE country = 'CN'
+  ORDER BY updated_at
+`
+
 Queries.CHINA_REGIONAL = `
   SELECT
     updated_at AS x_label,

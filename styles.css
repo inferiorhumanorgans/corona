@@ -180,6 +180,7 @@ rect {
   background: #f5f5f5;
   fill: #f5f5f5;
 }
+
 .recovered {
   background: #5ab4ac;
   fill: #5ab4ac;
@@ -203,13 +204,13 @@ rect {
   fill-opacity: 0.95;
 }
 
-div.tooltip {
+.tooltip {
   border: 0.25px solid #ccc;
   background: #f8f8f8;
   border-radius: 3px;
   position: fixed;
   z-index: 99999;
-  min-height: 75px;
+  min-height: 7px;
   min-width: 12em;
   padding: 0.25em;
   top: 0;
@@ -224,19 +225,11 @@ div.tooltip {
   padding-left: 2.5mm;
 }
 
-.tooltip_header {
+.tooltip-header {
   font-weight: bold;
 }
 
-.topo {
-  fill: none;
-}
-
-.topo.china-border-geo {
-  fill: #ff000025;
-}
-
-/* Be kind to mobile devices */
+/* Be kinder to mobile devices */
 @media (max-width: 450px) {
   .tick {
     font-size: 6pt
@@ -245,4 +238,130 @@ div.tooltip {
 
 .toggle_region {
   text-decoration: underline;
+}
+
+/* Map stuff */
+
+.map.plot {
+  /* border: 1px solid #ccc; */
+  /* position: absolute; */
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.province {
+  fill: #f0f0f0;
+}
+
+.level1 {
+  fill: #f7fcf5;
+  background-color: #f7fcf5;
+}
+
+.level2 {
+  fill: #e5f5e0;
+  background-color: #e5f5e0;
+}
+
+.level3 {
+  fill: #c7e9c0;
+  background-color: #c7e9c0;
+}
+
+.level4 {
+  fill: #a1d99b;
+  background-color: #a1d99b;
+}
+
+.level5 {
+  fill: #74c476;
+  background-color: #74c476;
+}
+
+.level6 {
+  fill: #41ab5d;
+  background-color: #41ab5d;
+}
+
+.level7 {
+  fill: #238b45;
+  background-color: #238b45;
+}
+
+.level8 {
+  fill: #006d2c;
+  background-color: #006d2c;
+}
+
+.level9 {
+  fill: #00441b;
+  background-color: #00441b;
+}
+.enabled {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.legend.key {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  margin-right: 0.25em;
+  border: 1px solid #ccc;
+}
+
+.map-legend li {
+  display: inline-block;
+  padding-right: 1em;
+}
+
+/* Slider */
+.track,
+.track-inset,
+.track-overlay {
+  stroke-linecap: round;
+}
+
+.track {
+  stroke: #000;
+  stroke-opacity: 0.3;
+  stroke-width: 10px;
+}
+
+.track-inset {
+  /* stroke: #ddd; */
+  stroke: #ccc;
+  stroke-width: 8px;
+}
+
+.track-overlay {
+  pointer-events: stroke;
+  stroke-width: 50px;
+  stroke: transparent;
+  cursor: crosshair;
+}
+
+.selection {
+  fill: navy;
+  opacity: 1
+}
+
+.handle {
+  pointer-events: none;
+}
+
+.overlay {
+  pointer-events: none;
+  fill: none;
+}
+
+.control {
+  background: none !important;
+}
+
+h2 {
+  font-weight: normal !important;
+  color: #1b191d;
 }

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>2019-nCoV visualizations</title>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+    <script lang="javascript" src="./dist/sql-wasm.js"></script>
+    <script lang="javascript" src="./dist/d3.v5.min.js"></script>
+    <script lang="javascript" src="./dist/d3-scale-cluster.min.js"></script>
+    <script lang="javascript" src="./dist/moment.min.js"></script>
+    <script lang="javascript" src="./dist/moment-strftime.js"></script>
+    <script lang="javascript" src="./dist/topojson.min.js"></script>
+    <script lang="javascript" src="./queries.js"></script>
+    <script lang="javascript" src="./app.js"></script>
+
+    <link rel="stylesheet" type="text/css" href = "styles.css" />
+
+    <script lang="javascript">
+      function toggle_region(event) {
+        switch (chart.profile) {
+          case "china":
+            chart.set_profile(db, "all")
+            return;
+          case "all":
+            chart.set_profile(db, "china")
+            return;
+        }
+      }
+
+      const SETTINGS = {
+        locale: 'en-US',
+        db_path: './data/nCoV.sqlite3',
+        topo_path: './data/china-provinces.topo.json',
+      }
+
+      let db = new Database(SETTINGS.db_path)
+      let map;
+      let provinces;
+
+      db.load_data()
+        .then(() => {
+          console.log("Loading spatial data")
+          d3.json(SETTINGS.topo_path)
+            .then((json) => {
+                console.log('[Topo]:', json)
+
+                provinces = Object.keys(json.objects)
+                console.log('provinces', provinces)
+
+                let query_results = db.query(Queries.CHINA_PROVINCIAL);
+                let nest = d3.nest()
+                  .key(function(d) {
+                    return d.x_label
+                  })
+                  .sortKeys(d3.ascending)
+                let bars = nest.object(query_results)
+
+                map = new Mapper(json, bars, provinces)
+                map.draw_features()
+
+                map.set_x(Object.keys(bars).pop())
+                map.set_field('confirmed')
+                map.refresh()
+              })
+              .catch((error) => {
+                console.error(`[GeoJSON]:`, error)
+              })
+      })
+</script>
+  </head>
+  <body>
+    <h2 style="text-align: center">2019-nCoV Cases in China <span class="x-date"></span></h2>
+    <div style="width: 100%">
+      <svg class="plot map"></svg>
+    </div>
+    <div>
+      <center>
+        <ul class="map-legend"></ul>
+        <div class="map-controls">
+          type: [<a class="control confirmed" href="javascript:map.set_field('confirmed');map.refresh()">confirmed cases</a>]
+          [<a class="control deaths" href="javascript:map.set_field('deaths');map.refresh()">deaths</a>]
+          date:
+            <a class="control prev" href="javascript:map.prev_x()">&lt;</a>
+            <a class="control next" href="javascript:map.next_x()">&gt;</a>
+          other:
+            <a href="./">area charts</a>
+        </div>
+      </center>
+    </div>
+    <div class="map tooltip">
+      <span class="tooltip-header"><span class="tooltip-province"></span><br>
+      <span class="tooltip-count"></span> <span class="tooltip_category"></span> as of <span class="tooltip_updated_at"></span>
+    </div>
+  </body>
+</html>
