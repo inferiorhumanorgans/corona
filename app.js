@@ -445,17 +445,17 @@ class Mapper {
       }
 
       if (event.key === "ArrowLeft") {
-        this.prev_x()
+        return this.prev_x()
       } else if (event.key === "ArrowRight") {
-        this.next_x()
+        return this.next_x()
       } else if (event.key === "Home") {
-        let x_value = moment(Object.keys(this.bars)[0]).toDate();
+        let x_value = Object.keys(this.bars)[0]
         this.set_x(x_value)
       } else if (event.key === "End") {
-        let x_value = moment(Object.keys(this.bars).pop()).toDate();
-        console.log(x_value)
+        let x_value = Object.keys(this.bars).pop()
         this.set_x(x_value)
       }
+      this.refresh()
     });
   }
 
