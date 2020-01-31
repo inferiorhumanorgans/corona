@@ -641,44 +641,48 @@ class Mapper {
     // const quantiles = this.map_colors.quantiles()
     const quantiles = this.map_colors.clusters()
     const range = this.map_colors.range()
+    const domain = this.map_colors.domain()
+    const min = d3.min(domain)
 
-    let lower_bound = 0
+    let lower_bound = min
+
+    function create_legend(upper_bound, idx) {
+      let key = `<div class="legend key ${range[idx]}">&nbsp</div>`
+
+      let range_string
+      let lower_number, upper_number
+
+      if (field.match(/_ratio$/)) {
+        lower_number = formatNumber(lower_bound, { style: "percent" })
+        upper_number = formatNumber(upper_bound - 0.01, { style: "percent" })
+      } else {
+        lower_number = formatNumber(lower_bound)
+        upper_number = formatNumber(upper_bound - 1)
+      }
+
+      if (lower_number === upper_number) {
+        range_string = lower_number
+      } else {
+        range_string = `${lower_number}–${upper_number}`
+      }
+
+      lower_bound = upper_bound
+      return `${key}${range_string}`
+    }
 
     d3.select(".map-legend").selectAll("li").remove()
     d3.select(".map-legend").selectAll("li")
-      .data(range)
+      .data(quantiles)
       .enter()
       .append("li")
-      .html(function(d, i) {
-        if (field.match(/_ratio$/)) {
-          let bounds = [lower_bound, quantiles[i]]
+      .html(create_legend)
 
-          lower_bound = quantiles[i]
-
-          let key = `<div class="legend key ${range[i]}">&nbsp</div>`
-          if (bounds[1]) {
-            let lower = formatNumber(bounds[0], {style: "percent"})
-            let upper = formatNumber(bounds[1], {style: "percent"})
-            return `${key}${lower}–${upper}`
-          } else {
-            let bound = formatNumber(bounds[0], {style: "percent"})
-            return `${key}${bound}`
-          }
-        } else {
-          let bounds = [lower_bound, quantiles[i]]
-
-          lower_bound = Math.round(quantiles[i])
-
-          let key = `<div class="legend key ${range[i]}">&nbsp</div>`
-          if (bounds[1]) {
-            let lower = formatNumber(Math.round(bounds[0]))
-            let upper = formatNumber(Math.round(bounds[1]))
-            return `${key}${lower}–${upper}`
-          } else {
-            let bound = formatNumber(Math.round(bounds[0]))
-            return `${key}${bound}+`
-          }
-        }
+    d3.select(".map-legend")
+      .append("li")
+      .html(function() {
+        const last_quantile = domain.filter(d => d >= lower_bound)
+        const factor = (field.match(/_ratio$/)) ? 0.01 : 1
+        return create_legend(d3.max(last_quantile) + factor, quantiles.length)
       })
 
     for (const bar of bars) {
