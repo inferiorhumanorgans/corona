@@ -552,7 +552,9 @@ class Mapper {
 
     this.x_label = x_label
     this.tooltip.select(".tooltip_updated_at").text(this.x_label)
-    d3.selectAll(".x-date").text(this.x_label)
+
+    const dateCaption = moment(this.x_label).strftime("%d %B %Y %H:%M")
+    d3.selectAll(".x-date").text(dateCaption)
 
     const bounds = this.brush_bounds(x_label).map(this.x)
     this.brush.move(this.handle, bounds)
