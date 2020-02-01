@@ -381,7 +381,7 @@ class Mapper {
     let xFirst = x_values[0].toDate()
     let xLast = [...x_values].pop().toDate()
     let xMin = x_values[0].startOf("week").toDate()
-    let xMax = [...x_values].pop().endOf("month").toDate()
+    let xMax = [...x_values].pop().endOf("week").toDate()
 
     this.x = d3.scaleTime()
       .domain([xMin, xMax])

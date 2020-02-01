@@ -13,12 +13,12 @@
     <script lang="javascript" src="./dist/moment-strftime.js"></script>
     <script lang="javascript" src="./dist/topojson.min.js"></script>
     <script lang="javascript" src="./js/queries.js"></script>
-    <script lang="javascript" src="./js/app.js"></script>
+    <script lang="javascript" src="./js/app.js?v=2020-02-01-01"></script>
 
     <script lang="javascript">
       const SETTINGS = {
         locale: 'en-US',
-        db_path: './data/nCoV.sqlite3?v=2020-01-31-1430-2',
+        db_path: './data/nCoV.sqlite3?v=2020-02-01-1800',
         topo_path: './data/china-provinces.topo.json?v=2',
       }
 
@@ -74,7 +74,8 @@
           <span class="h-space">&nbsp;</span>
 
           <span class="enabled">other:</span>
-          <a href="./">area charts</a>
+          [<a href="./">area charts</a>]
+          [<a href="./map-europe.html">map of europe</a>]
           <span class="h-space">&nbsp;</span>
 
           Hit <span style="font-family: 'DejaVu Mono'">?</span> for more info.

@@ -22,39 +22,9 @@ Queries.ALL_REGIONS = `
     SELECT
       updated_at,
       SUM(IFNULL(confirmed, 0)) AS count,
-      CASE
-        WHEN country = 'CN' THEN
-          'china'
-        WHEN country IN ('HK', 'MO', 'MN', 'KP', 'KR', 'JP', 'TW') THEN
-          'east_asia'
-        WHEN country IN ('BN', 'KH', 'ID', 'LA', 'MY', 'MM', 'PH', 'SG', 'TH', 'TL', 'VN') THEN
-          'southeast_asia'
-        WHEN country IN ('KZ', 'UZ', 'TJ', 'KG') THEN
-          'central_asia'
-        WHEN country IN ('AF', 'PK', 'IN', 'MV', 'LK', 'NP', 'BT', 'BD') THEN
-          'south_asia'
-        WHEN country IN ('RU') THEN
-          'eastern_europe'
-        WHEN country IN ('AM', 'AZ', 'BH', 'GE', 'IR', 'IQ', 'IL', 'JO', 'KW', 'LB', 'OM', 'QA', 'SA', 'SY', 'TR', 'AE', 'YE') THEN
-          'middle_east' -- 'western_asia'
-        WHEN country IN ('CA', 'US', 'MX') THEN
-          'north_america'
-        -- south_america
-        WHEN country IN ('AT', 'CZ', 'DE', 'HU', 'LI', 'PL', 'SK', 'SI', 'CH') THEN
-          'central_europe'
-        WHEN country IN ('AD', 'BE', 'FR', 'IE', 'LU', 'MC', 'NL', 'PT', 'ES', 'GB') THEN
-          'western_europe'
-        WHEN country IN ('AL', 'BY', 'BA', 'BG', 'HR', 'EE', 'LV', 'LT', 'MK', 'MD', 'ME', 'RO', 'RS', 'UA') THEN
-          'eastern_europe'
-        WHEN country IN ('DK', 'FI', 'IS', 'NO', 'SE') THEN
-          'northern_europe'
-        WHEN country IN ('GR', 'VA', 'IT', 'MT', 'SM', 'CY') THEN
-          'southern_europe'
-        -- 
-        ELSE
-          'other'
-        END AS region
-    FROM cases
+      region
+    FROM cases, iso_countries
+    WHERE iso_countries.alpha_2 = country
     GROUP BY updated_at, region
     ORDER BY updated_at ASC, region ASC
   )
@@ -108,23 +78,9 @@ Queries.CHINA_REGIONAL = `
       country,
       updated_at,
       SUM(IFNULL(confirmed, 0)) AS count,
-      CASE
-        WHEN province IN ('Beijing', 'Tianjin', 'Hebei', 'Shanxi', 'Inner Mongolia') THEN
-          'north_china'
-        WHEN province IN ('Liaoning', 'Jilin', 'Heilongjiang') THEN
-          'northeast_china'
-        WHEN province IN ('Shanghai', 'Jiangsu', 'Zhejiang', 'Anhui', 'Fujian', 'Jiangxi', 'Shandong') THEN
-          'east_china'
-        WHEN province IN ('Henan', 'Hubei', 'Hunan', 'Guangdong', 'Guangxi', 'Hainan') THEN
-          'south_central_china'
-        WHEN province IN ('Chongqing', 'Sichuan', 'Guizhou', 'Yunnan', 'Tibet') THEN
-          'southwest_china'
-        WHEN province IN ('Shaanxi', 'Gansu', 'Qinghai', 'Ningxia', 'Xinjiang') THEN
-          'northwest_china'
-        ELSE
-          province
-        END region
-    FROM cases WHERE country = 'CN'
+      region
+    FROM cases, china_provinces
+    WHERE country = 'CN' AND province = china_provinces.name
     GROUP BY updated_at, region
     ORDER BY updated_at ASC, region ASC)
   GROUP BY updated_at
