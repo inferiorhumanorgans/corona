@@ -505,12 +505,19 @@ class Mapper {
   draw_feature(feature, node) {
     let topo = topojson.feature(this.topo_data, this.topo_data.objects[feature])
 
+    // Add the province key to our TopoJSON features so we can
+    // muck with them later without touching the spatial data
+    topo.features = topo.features.map(function(f) {
+      f.province = feature
+      return f
+    })
+
     let tooltip_handler = this.tooltip_handler
     let tooltip_hide = this.tooltip_hide
     let tooltip = this.tooltip
 
     node.selectAll(`path.${feature}`)
-        .data(topo.features)
+        .data(topo.features, d => d.province)
         .enter()
         .append("path")
           .style("stroke", "black")
@@ -685,14 +692,24 @@ class Mapper {
         return create_legend(d3.max(last_quantile) + factor, quantiles.length)
       })
 
-    for (const bar of bars) {
-      let province = bar.province.toLocaleLowerCase()
+    const map_colors = this.map_colors
 
-      d3.select(`.province.${province}`)
-        .attr("data-field", field)
-        .attr("data-count", bar[field])
-        .attr("class", `topo province ${province} ${this.map_colors(bar[field])}`)
-    }
+    // Zero out the provinces in case we have gaps in the data
+    d3.selectAll('.topo.province')
+      .attr("class", "topo province")
+      .attr("data-count", null)
+      .attr("data-field", null)
+
+    d3.selectAll('.province')
+      .data(bars, function(d) {
+        return d.province.toLocaleLowerCase().replace(/\s+/, '_')
+      })
+      .attr("data-field", () => field)
+      .attr("data-count", d => d[field])
+      .attr("class", function(d) {
+        let province_key = d.province.toLocaleLowerCase().replace(/\s+/, '_')
+        return `topo province ${province_key} ${map_colors(d[field])}`
+      })
   }
 
   tooltip_hide(group, tooltip) {
