@@ -144,6 +144,10 @@ class StackedArea {
     let last_date = moment(last.x_label).strftime("%b %d, %Y %H:%M")
     this.title.html(`2019-nCoV Incidence <tspan class='toggle_region' onclick='javascript:toggle_region()'>${this.chart_region}</tspan> as of ${last_date}`)
 
+    // Update X
+    this.maxTime = moment(last.x_label).endOf("week")
+    this.x.domain([this.minTime.toDate(), this.maxTime.toDate()])
+
     let lastD = [...this.data].pop()
     let maxN = this.series.reduce(function(acc, s) {
       return acc + lastD[s]
