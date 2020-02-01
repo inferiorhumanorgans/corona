@@ -1,0 +1,238 @@
+@use "sass:meta";
+@use "settings";
+
+@font-face {
+  font-family: "Palanquin";
+  font-weight: 300;
+  src: url(./dist/Palanquin-Thin.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Palanquin";
+  font-weight: 500;
+  src: url(./dist/Palanquin-Regular.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "DejaVu Mono";
+  src: url(./dist/DejaVuSansMono.ttf) format("truetype");
+}
+
+html {
+  font-family: settings.$proportional_font;
+  font-weight: 300;
+  background-color: settings.$document_background;
+}
+
+svg {
+  font-size: 10px;
+  font-family: settings.$mono_font;
+  z-index: 10;
+}
+
+h4 {
+  font-weight: 500;
+}
+
+.menu-content ul {
+  margin-top: 0.25em;
+}
+.menu-content h4 {
+  padding: 0;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.menu {
+  visibility: hidden;
+  border-radius: 3px;
+  position: fixed;
+  background: #fff;
+  padding: 1.25mm;
+  border: 1px solid #ccc;
+  /* box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 10px; */
+  /* box-shadow: rgba(221, 221, 221, 0.5) 0px 0px 5px; */
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+  width: 25%;
+  display: flex;
+  flex-direction: row;
+}
+
+.menu > div {
+  flex-grow: 1;
+  /* width: 50%; */
+}
+
+.legend_item {
+  float: left;
+  border: 1px solid settings.$blackish;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.33em;
+  opacity: 1;
+  vertical-align: text-bottom !important;
+}
+
+a,
+a:visited {
+  text-decoration: underline;
+  color: settings.$blackish;
+}
+
+a:hover {
+  color: settings.$blackish;
+}
+
+.menu ul {
+  list-style-type: none;
+  padding-left: 2.5mm;
+}
+
+.menu_button {
+  position: absolute;
+  right: 20px;
+  font-size: 48px;
+  user-select: none;
+}
+.menu_button text {
+  fill: settings.$blackish !important;
+}
+
+.x.axis {
+  fill: settings.$blackish;
+  fill-opacity: 1;
+  stroke: none;
+}
+
+.y.axis text {
+  fill: settings.$blackish;
+  font-family: settings.$mono_font;
+}
+
+.y.axis path {
+  display: none;
+}
+
+.y.axis line {
+  stroke: settings.$blackish;
+  stroke-opacity: 1;
+  shape-rendering: crispEdges;
+}
+
+.y.axis .zero line {
+  stroke: settings.$blackish;
+  stroke-opacity: 1;
+}
+
+.title {
+  font: 300 48px settings.$proportional_font;
+  fill: settings.$blackish;
+  stroke: 1px solid settings.$blackish;
+}
+
+.subtitle {
+  font: 300 24px settings.$proportional_font;
+  fill: settings.$blackish;
+}
+
+.x.axis text {
+  font-family: settings.$mono_font;
+}
+
+.x.axis .domain {
+  stroke-width: 1px;
+  fill: none;
+  display: none;
+}
+.area {
+  fill-opacity: 0.95;
+}
+
+.tooltip {
+  border: 0.25px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 3px;
+  position: fixed;
+  z-index: 99999;
+  min-height: 7px;
+  min-width: 12em;
+  padding: 0.25em;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  box-shadow:0 1px 2px rgba(0, 0, 0, 0.25);
+  font-size: 8pt;
+}
+
+.tooltip ul {
+  list-style-type: none;
+  padding-left: 2.5mm;
+}
+
+.tooltip-header {
+  font-weight: bold;
+}
+
+/* Be kinder to mobile devices */
+@media (max-width: 450px) {
+  .tick {
+    font-size: 6pt
+  }
+}
+
+.toggle_region {
+  text-decoration: underline;
+}
+
+.control {
+  background: none !important;
+}
+
+.enabled {
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.legend.key {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  margin-right: 0.25em;
+  border: 1px solid #ccc;
+}
+
+
+h2, h3 {
+  font-weight: 100 !important;
+  color: #1b191d;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.h-space {
+  display: inline-block;
+  width: 1.75em;
+}
+
+.about {
+  box-shadow:0 1px 3px rgba(0,0,0,.25);
+  top: 12.5%;
+  left: 17%;
+  padding: 1em;
+  opacity: 1;
+  background: #eaeaea;
+  width: calc(66% - 1em);
+  height: calc(75% - 1em);
+  position: fixed;
+  display: none;
+  line-height: 130%;
+}
+
+@include meta.load-css("chart_area");
+@include meta.load-css("chart_map");
+@include meta.load-css("palette_case");
+@include meta.load-css("palette_china");
+@include meta.load-css("palette_global");
+@include meta.load-css("palette_sequential");

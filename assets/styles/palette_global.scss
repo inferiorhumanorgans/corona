@@ -1,0 +1,83 @@
+@use "settings";
+
+// .china {
+//   fill: nth( settings.$palette_diverging_11, 1);
+//   background: nth( settings.$palette_diverging_11, 1);
+// }
+
+.east_asia {
+  fill: nth( settings.$palette_diverging_11, 1);
+  background: nth( settings.$palette_diverging_11, 1);
+}
+
+.southeast_asia
+{
+  fill: nth( settings.$palette_diverging_11, 2);
+  background: nth( settings.$palette_diverging_11, 2);
+}
+
+.central_asia
+{
+  fill: nth( settings.$palette_diverging_11, 3);
+  background: nth( settings.$palette_diverging_11, 3);
+}
+
+.south_asia
+{
+  fill: nth( settings.$palette_diverging_11, 4);
+  background: nth( settings.$palette_diverging_11, 4);
+}
+
+.eastern_europe
+{
+  fill: nth( settings.$palette_diverging_11, 5);
+  background: nth( settings.$palette_diverging_11, 5);
+}
+
+.central_europe
+{
+  fill: nth( settings.$palette_diverging_11, 6);
+  background: nth( settings.$palette_diverging_11, 6);
+}
+
+.western_europe
+{
+  fill: nth( settings.$palette_diverging_11, 7);
+  background: nth( settings.$palette_diverging_11, 7);
+}
+
+.northern_europe
+{
+  fill: nth( settings.$palette_diverging_11, 8);
+  background: nth( settings.$palette_diverging_11, 8);
+}
+
+.southern_europe
+{
+  fill: nth( settings.$palette_diverging_11, 9);
+  background: nth( settings.$palette_diverging_11, 9);
+}
+
+.middle_east
+{
+  fill: nth( settings.$palette_diverging_11, 10);
+  background: nth( settings.$palette_diverging_11, 10);
+}
+
+.north_america
+{
+  fill: nth( settings.$palette_diverging_11, 11);
+  background: nth( settings.$palette_diverging_11, 11);
+}
+
+.south_america
+{
+  fill: nth( settings.$palette_diverging_11, 11);
+  background: nth( settings.$palette_diverging_11, 11);
+}
+
+.other
+{
+  fill: black;
+  background: black;
+}

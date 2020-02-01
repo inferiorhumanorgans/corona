@@ -2,13 +2,64 @@ class Queries {
 }
 
 Queries.ALL_REGIONS = `
-    SELECT updated_at AS x_label,
-      SUM(IFNULL(recovered,0)) AS recovered,
-      SUM(IFNULL(deaths,0)) AS deaths,
-      SUM(IFNULL(confirmed, 0)) AS confirmed
+  SELECT
+    updated_at AS x_label,
+    SUM(CASE WHEN region = 'china' THEN count END) as china,
+    SUM(CASE WHEN region = 'east_asia' THEN count END) as east_asia,
+    SUM(CASE WHEN region = 'southeast_asia' THEN count END) as southeast_asia,
+    SUM(CASE WHEN region = 'central_asia' THEN count END) as central_asia,
+    SUM(CASE WHEN region = 'south_asia' THEN count END) as south_asia,
+    SUM(CASE WHEN region = 'middle_east' THEN count END) as middle_east,
+    SUM(CASE WHEN region = 'north_america' THEN count END) as north_america,
+    SUM(CASE WHEN region = 'south_america' THEN count END) as south_america,
+    SUM(CASE WHEN region = 'central_europe' THEN count END) as central_europe,
+    SUM(CASE WHEN region = 'western_europe' THEN count END) as western_europe,
+    SUM(CASE WHEN region = 'eastern_europe' THEN count END) as eastern_europe,
+    SUM(CASE WHEN region = 'northern_europe' THEN count END) as northern_europe,
+    SUM(CASE WHEN region = 'southern_europe' THEN count END) as southern_europe,
+    SUM(CASE WHEN region = 'other' THEN count END) as other
+  FROM (
+    SELECT
+      updated_at,
+      SUM(IFNULL(confirmed, 0)) AS count,
+      CASE
+        WHEN country = 'CN' THEN
+          'china'
+        WHEN country IN ('HK', 'MO', 'MN', 'KP', 'KR', 'JP', 'TW') THEN
+          'east_asia'
+        WHEN country IN ('BN', 'KH', 'ID', 'LA', 'MY', 'MM', 'PH', 'SG', 'TH', 'TL', 'VN') THEN
+          'southeast_asia'
+        WHEN country IN ('KZ', 'UZ', 'TJ', 'KG') THEN
+          'central_asia'
+        WHEN country IN ('AF', 'PK', 'IN', 'MV', 'LK', 'NP', 'BT', 'BD') THEN
+          'south_asia'
+        WHEN country IN ('RU') THEN
+          'eastern_europe'
+        WHEN country IN ('AM', 'AZ', 'BH', 'GE', 'IR', 'IQ', 'IL', 'JO', 'KW', 'LB', 'OM', 'QA', 'SA', 'SY', 'TR', 'AE', 'YE') THEN
+          'middle_east' -- 'western_asia'
+        WHEN country IN ('CA', 'US', 'MX') THEN
+          'north_america'
+        -- south_america
+        WHEN country IN ('AT', 'CZ', 'DE', 'HU', 'LI', 'PL', 'SK', 'SI', 'CH') THEN
+          'central_europe'
+        WHEN country IN ('AD', 'BE', 'FR', 'IE', 'LU', 'MC', 'NL', 'PT', 'ES', 'GB') THEN
+          'western_europe'
+        WHEN country IN ('AL', 'BY', 'BA', 'BG', 'HR', 'EE', 'LV', 'LT', 'MK', 'MD', 'ME', 'RO', 'RS', 'UA') THEN
+          'eastern_europe'
+        WHEN country IN ('DK', 'FI', 'IS', 'NO', 'SE') THEN
+          'northern_europe'
+        WHEN country IN ('GR', 'VA', 'IT', 'MT', 'SM', 'CY') THEN
+          'southern_europe'
+        -- 
+        ELSE
+          'other'
+        END AS region
     FROM cases
-    GROUP BY x_label
-    ORDER BY x_label;`
+    GROUP BY updated_at, region
+    ORDER BY updated_at ASC, region ASC
+  )
+  GROUP BY updated_at
+  `
 
 Queries.CHINA_PROVINCIAL = `
   SELECT
@@ -78,6 +129,7 @@ Queries.CHINA_REGIONAL = `
     ORDER BY updated_at ASC, region ASC)
   GROUP BY updated_at
   `
+
 Queries.EUROPE_BY_COUNTRY = `
   SELECT
     x_label,

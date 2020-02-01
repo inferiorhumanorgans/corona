@@ -1,0 +1,64 @@
+@use "settings";
+
+.map {
+  &.plot {
+    /* border: 1px solid #ccc; */
+    /* position: absolute; */
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  
+    .maptick {
+      stroke: settings.$blackish;
+    }
+    
+    /* Slider */
+    .track,
+    .track-inset,
+    .track-overlay {
+      stroke-linecap: round;
+    }
+
+    .track {
+      stroke: #000;
+      stroke-opacity: 0.3;
+      stroke-width: 10px;
+    }
+
+    .track-inset {
+      /* stroke: #ddd; */
+      stroke: #ccc;
+      stroke-width: 8px;
+    }
+
+    .track-overlay {
+      pointer-events: stroke;
+      stroke-width: 50px;
+      stroke: transparent;
+      cursor: crosshair;
+    }
+
+    .selection {
+      fill: navy;
+      opacity: 1
+    }
+
+    .handle {
+      pointer-events: none;
+    }
+
+    .overlay {
+      pointer-events: none;
+      fill: none;
+    }
+  }
+
+  &.legend li {
+    display: inline-block;
+    padding-right: 1em;
+  }
+
+}
+.province {
+  fill: #f0f0f0;
+}  

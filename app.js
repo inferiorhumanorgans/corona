@@ -143,6 +143,7 @@ class StackedArea {
     let last = [...this.data].pop()
     let last_date = moment(last.x_label).strftime("%b %d, %Y %H:%M")
     this.title.html(`2019-nCoV Incidence <tspan class='toggle_region' onclick='javascript:toggle_region()'>${this.chart_region}</tspan> as of ${last_date}`)
+
     let lastD = [...this.data].pop()
     let maxN = this.series.reduce(function(acc, s) {
       return acc + lastD[s]
@@ -251,6 +252,10 @@ class StackedArea {
         return `Total: ${formatNumber(series_total)}`
       })
 
+    // chart.tooltip
+    // .interrupt()
+    // .style("left", 0)
+
     chart.tooltip.select(".tooltip_updated_at").text(datum.x_label)
 
     let bounds = chart.tooltip.node().getBoundingClientRect();
@@ -296,7 +301,22 @@ class StackedArea {
       }
       case "all": {
         let data = db.query(Queries.ALL_REGIONS)
-        this.set_source(data, ["confirmed", "deaths", "recovered"], "Worldwide");
+        this.set_source(data, [
+          // "china",
+          "east_asia",
+          "southeast_asia",
+          "central_asia",
+          "south_asia",
+          "eastern_europe",
+          "central_europe",
+          "western_europe",
+          "northern_europe",
+          "southern_europe",
+          "middle_east",
+          "north_america",
+          "south_america",
+          "other"
+        ], "Outside China");
         break;
       }
       default: {
@@ -635,7 +655,7 @@ class Mapper {
   }
 
   refresh() {
-    console.log("Refresh map", this.x_label)
+    // console.log("Refresh map", this.x_label)
 
     const field = this.field
     const bars = this.bars[this.x_label]
@@ -677,14 +697,14 @@ class Mapper {
       return `${key}${range_string}`
     }
 
-    d3.select(".map-legend").selectAll("li").remove()
-    d3.select(".map-legend").selectAll("li")
+    d3.select(".map.legend").selectAll("li").remove()
+    d3.select(".map.legend").selectAll("li")
       .data(quantiles)
       .enter()
       .append("li")
       .html(create_legend)
 
-    d3.select(".map-legend")
+    d3.select(".map.legend")
       .append("li")
       .html(function() {
         const last_quantile = domain.filter(d => d >= lower_bound)
@@ -729,7 +749,7 @@ class Mapper {
   tooltip_handler(group, tooltip) {
     let node = d3.select(this)
     const province_name = node.attr("data-name")
-    const province = CHINA_PROVINCES[province_name]
+    const province = CHINA_PROVINCES[province_name] || EURO_COUNTRIES[province_name]
 
     let bounds = tooltip.node().getBoundingClientRect();
 

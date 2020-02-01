@@ -1,0 +1,31 @@
+@use "settings";
+
+.east_china {
+  background: nth( settings.$palette_diverging_6, 2);
+  fill: nth( settings.$palette_diverging_6, 2);
+}  
+
+.north_china {
+  background:nth( settings.$palette_diverging_6, 3);
+  fill:nth( settings.$palette_diverging_6, 3);
+}
+
+.northeast_china {
+  background: nth( settings.$palette_diverging_6, 5);
+  fill: nth( settings.$palette_diverging_6, 5);
+}
+
+.northwest_china {
+  background: nth( settings.$palette_diverging_6, 4);
+  fill: nth( settings.$palette_diverging_6, 4);
+}
+
+.south_central_china {
+  background: nth( settings.$palette_diverging_6, 1);
+  fill: nth( settings.$palette_diverging_6, 1);
+}
+
+.southwest_china {
+  background: nth( settings.$palette_diverging_6, 6);
+  fill: nth( settings.$palette_diverging_6, 6);
+}

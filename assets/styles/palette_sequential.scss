@@ -1,0 +1,46 @@
+@use "settings";
+
+.level1 {
+  fill: nth( settings.$palette_sequential, 1);
+  background-color: nth( settings.$palette_sequential, 1);
+}
+
+.level2 {
+  fill: nth( settings.$palette_sequential, 2);
+  background-color: nth( settings.$palette_sequential, 2);
+}
+
+.level3 {
+  fill: nth( settings.$palette_sequential, 3);
+  background-color: nth( settings.$palette_sequential, 3);
+}
+
+.level4 {
+  fill: nth( settings.$palette_sequential, 4);
+  background-color: nth( settings.$palette_sequential, 4);
+}
+
+.level5 {
+  fill: nth( settings.$palette_sequential, 5);
+  background-color: nth( settings.$palette_sequential, 5);
+}
+
+.level6 {
+  fill: nth( settings.$palette_sequential, 6);
+  background-color: nth( settings.$palette_sequential, 6);
+}
+
+.level7 {
+  fill: nth( settings.$palette_sequential, 7);
+  background-color: nth( settings.$palette_sequential, 7);
+}
+
+.level8 {
+  fill: nth( settings.$palette_sequential, 8);
+  background-color: nth( settings.$palette_sequential, 8);
+}
+
+.level9 {
+  fill: nth( settings.$palette_sequential, 9);
+  background-color: nth( settings.$palette_sequential, 9);
+}
