@@ -1,6 +1,6 @@
 # GNU Make special…
 
-.PHONY: dist assets
+.PHONY: dist assets fetch fetch-do fetch-process
 
 run:
 	python -m SimpleHTTPServer 8888
@@ -19,3 +19,13 @@ dist: assets
 assets:
 	@echo "Generating stylesheet"
 	@sass assets/styles/index.scss styles.css
+
+fetch: fetch-do fetch-process
+
+fetch-do:
+	@cd assets/data && ../tools/scrape.rb fetch
+
+fetch-process: dataset := $(shell basename $$(ls assets/data/*.ods | sort | tail -1) .ods)
+fetch-process:
+	@echo "Converting ODS to SQLite3 DB"
+	@assets/tools/scrape.rb assets/data/$(dataset).ods | sqlite3 assets/data/$(dataset).sqlite3

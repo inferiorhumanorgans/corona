@@ -84,7 +84,7 @@ SCHEMA="CREATE TABLE cases (
   suspected INTEGER
 );"
 
-NULL_IS_ZERO = true
+NULL_IS_ZERO = false
 
 # Code
 
@@ -175,6 +175,14 @@ def get_country_code(country, province)
     return "IN"
   when /Italy/i
     return "IT"
+  when /UK/i
+    return "GB"
+  when /Russia/i
+    return "RU"
+  when /Sweden/i
+    return "SE"
+  when /Spain/i
+    return "ES"
   else
     STDERR.puts "Warning: couldn't identify #{country}"
     return country
