@@ -745,8 +745,12 @@ class Mapper {
     }
 
     tooltip.selectAll(".tooltip-province").text(province.name)
+    tooltip.selectAll(".tooltip-category").style("display", null)
 
-    if (node.attr("data-field").match(/_ratio$/)) {
+    if (!node.attr("data-field") || node.attr("data-count") === null) {
+      tooltip.selectAll(".tooltip-count").text("No data")
+      tooltip.selectAll(".tooltip-category").style("display", "none")
+    } else if (node.attr("data-field").match(/_ratio$/)) {
       let value = node.attr("data-count")
       let count
 

@@ -19,16 +19,24 @@ Queries.CHINA_PROVINCIAL = `
     recovered,
     deaths,
     known,
-    (CAST(deaths AS REAL) / CAST(known AS REAL)) AS death_ratio
+    CASE
+      WHEN known IS NOT NULL THEN
+        (CAST(IFNULL(deaths, 0) AS REAL) / CAST(known AS REAL))
+      ELSE
+        NULL
+    END AS death_ratio
   FROM
     ( SELECT
       updated_at AS x_label,
       province,
-      IFNULL(confirmed, 0) AS confirmed,
-      IFNULL(suspected, 0) AS suspected,
-      IFNULL(recovered, 0) AS recovered,
-      IFNULL(deaths, 0) AS deaths,
-      (IFNULL(deaths, 0) + IFNULL(recovered, 0)) AS known
+      confirmed,
+      suspected,
+      recovered,
+      deaths,
+      CASE
+        WHEN deaths IS NULL AND recovered IS NULL THEN NULL
+        ELSE (IFNULL(deaths, 0) + IFNULL(recovered, 0))
+      END AS known
     FROM cases
     WHERE country = 'CN'
     ORDER BY updated_at
@@ -79,7 +87,12 @@ Queries.EUROPE_BY_COUNTRY = `
     recovered,
     deaths,
     known,
-    (CAST(deaths AS REAL) / CAST(known AS REAL)) AS death_ratio
+    CASE
+      WHEN known IS NOT NULL THEN
+        (CAST(IFNULL(deaths, 0) AS REAL) / CAST(known AS REAL))
+      ELSE
+        NULL
+    END AS death_ratio
   FROM
     (
       SELECT
@@ -137,11 +150,14 @@ Queries.EUROPE_BY_COUNTRY = `
         WHEN country = 'GB' THEN	'United Kingdom'
         WHEN country = 'VA' THEN	'Vatican City'
         END AS province,
-        IFNULL(confirmed, 0) AS confirmed,
-        IFNULL(suspected, 0) AS suspected,
-        IFNULL(recovered, 0) AS recovered,
-        IFNULL(deaths, 0) AS deaths,
-        (IFNULL(deaths, 0) + IFNULL(recovered, 0)) AS known
+        confirmed,
+        suspected,
+        recovered,
+        deaths,
+        CASE
+          WHEN deaths IS NULL AND recovered IS NULL THEN NULL
+          ELSE (IFNULL(deaths, 0) + IFNULL(recovered, 0))
+        END AS known
       FROM cases
       WHERE country IN ('AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'GR', 'HU', 'IS', 'IE', 'IT', 'KZ', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB', 'VA')
       ORDER BY updated_at
