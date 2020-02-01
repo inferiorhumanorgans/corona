@@ -874,6 +874,231 @@ const CHINA_PROVINCES = {
   },
 }
 
+const EURO_COUNTRIES = {
+  "albania": {
+    "name": "Albania",
+    "population": 0,
+  },
+  "andorra": {
+    "name": "Andorra",
+    "population": 0,
+  },
+  "armenia": {
+    "name": "Armenia",
+    "population": 0,
+  },
+  "austria": {
+    "name": "Austria",
+    "population": 0,
+  },
+  "azerbaijan": {
+    "name": "Azerbaijan",
+    "population": 0,
+  },
+
+  "belarus": {
+    "name": "Belarus",
+    "population": 0,
+  },
+  "belgium": {
+    "name": "Belgium",
+    "population": 0,
+  },
+  "bosnia_and_herzegovina": {
+    "name": "Bosnia and Herzegovina",
+    "population": 0,
+  },
+  "bulgaria": {
+    "name": "Bulgaria",
+    "population": 0,
+  },
+
+  "croatia": {
+    "name": "Croatia",
+    "population": 0,
+  },
+  "cyprus": {
+    "name": "Cyprus",
+    "population": 0,
+  },
+  "czechia": {
+    "name": "Czechia",
+    "population": 0,
+  },
+
+  "denmark": {
+    "name": "Denmark",
+    "population": 0,
+  },
+
+  "estonia": {
+    "name": "Estonia",
+    "population": 0,
+  },
+
+  "finland": {
+    "name": "Finland",
+    "population": 0,
+  },
+  "france": {
+    "name": "France",
+    "population": 0,
+  },
+
+  "georgia": {
+    "name": "Georgia",
+    "population": 0,
+  },
+  "germany": {
+    "name": "Germany",
+    "population": 0,
+  },
+  "greece": {
+    "name": "Greece",
+    "population": 0,
+  },
+
+  "hungary": {
+    "name": "Hungary",
+    "population": 0,
+  },
+
+  "iceland": {
+    "name": "Iceland",
+    "population": 0,
+  },
+  "ireland": {
+    "name": "Ireland",
+    "population": 0,
+  },
+  "italy": {
+    "name": "Italy",
+    "population": 0,
+  },
+
+  "kazakhstan": {
+    "name": "Kazakhstan",
+    "population": 0,
+  },
+  "kosovo": {
+    "name": "Kosovo",
+    "population": 0,
+  },
+
+  "latvia": {
+    "name": "Latvia",
+    "population": 0,
+  },
+  "liechtenstein": {
+    "name": "Liechtenstein",
+    "population": 0,
+  },
+  "lithuania": {
+    "name": "Lithuania",
+    "population": 0,
+  },
+  "luxembourg": {
+    "name": "Luxembourg",
+    "population": 0,
+  },
+
+  "malta": {
+    "name": "Malta",
+    "population": 0,
+  },
+  "moldova": {
+    "name": "Moldova",
+    "population": 0,
+  },
+  "monaco": {
+    "name": "Monaco",
+    "population": 0,
+  },
+  "montenegro": {
+    "name": "Montenegro",
+    "population": 0,
+  },
+
+  "netherlands": {
+    "name": "Netherlands",
+    "population": 0,
+  },
+  "macedonia": {
+    "name": "Macedonia",
+    "population": 0,
+  },
+  "norway": {
+    "name": "Norway",
+    "population": 0,
+  },
+
+  "poland": {
+    "name": "Poland",
+    "population": 0,
+  },
+  "portugal": {
+    "name": "Portugal",
+    "population": 0,
+  },
+
+  "romania": {
+    "name": "Romania",
+    "population": 0,
+  },
+  "russia": {
+    "name": "Russia",
+    "population": 0,
+  },
+
+  "san_marino": {
+    "name": "San Marino",
+    "population": 0,
+  },
+  "serbia": {
+    "name": "Serbia",
+    "population": 0,
+  },
+  "slovakia": {
+    "name": "Slovakia",
+    "population": 0,
+  },
+  "slovenia": {
+    "name": "Slovenia",
+    "population": 0,
+  },
+  "spain": {
+    "name": "Spain",
+    "population": 0,
+  },
+  "sweden": {
+    "name": "Sweden",
+    "population": 0,
+  },
+  "switzerland": {
+    "name": "Switzerland",
+    "population": 0,
+  },
+
+  "turkey": {
+    "name": "Turkey",
+    "population": 0,
+  },
+
+  "ukraine": {
+    "name": "Ukraine",
+    "population": 0,
+  },
+  "united_kingdom": {
+    "name": "United Kingdom",
+    "population": 0,
+  },
+
+  "vatican_city": {
+    "name": "Vatican City",
+    "population": 0,
+  },
+}
+
 window.addEventListener("keydown", event => {
   if (event.metaKey || event.altKey || event.ctrlKey) {
     return
