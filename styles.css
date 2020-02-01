@@ -397,33 +397,33 @@ h2, h3 {
 }
 
 .level1 {
-  fill: #f7fcfd;
-  background-color: #f7fcfd;
+  fill: #f7fcf5;
+  background-color: #f7fcf5;
 }
 
 .level2 {
-  fill: #e5f5f9;
-  background-color: #e5f5f9;
+  fill: #e5f5e0;
+  background-color: #e5f5e0;
 }
 
 .level3 {
-  fill: #ccece6;
-  background-color: #ccece6;
+  fill: #c7e9c0;
+  background-color: #c7e9c0;
 }
 
 .level4 {
-  fill: #99d8c9;
-  background-color: #99d8c9;
+  fill: #a1d99b;
+  background-color: #a1d99b;
 }
 
 .level5 {
-  fill: #66c2a4;
-  background-color: #66c2a4;
+  fill: #74c476;
+  background-color: #74c476;
 }
 
 .level6 {
-  fill: #41ae76;
-  background-color: #41ae76;
+  fill: #41ab5d;
+  background-color: #41ab5d;
 }
 
 .level7 {

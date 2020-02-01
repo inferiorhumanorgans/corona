@@ -1,0 +1,4 @@
+--- 
+exclude: 
+  - assets
+  - README.md
