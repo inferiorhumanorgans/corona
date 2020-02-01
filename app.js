@@ -701,14 +701,14 @@ class Mapper {
       .attr("data-field", null)
 
     d3.selectAll('.province')
-      .data(bars, function(d) {
-        return d.province.toLocaleLowerCase().replace(/\s+/, '_')
-      })
+      .data(bars, d => d.province.toLocaleLowerCase().replace(/\s+/, '_'))
       .attr("data-field", () => field)
       .attr("data-count", d => d[field])
-      .attr("class", function(d) {
-        let province_key = d.province.toLocaleLowerCase().replace(/\s+/, '_')
-        return `topo province ${province_key} ${map_colors(d[field])}`
+      .attr("class", d => {
+        const province_key = d.province.toLocaleLowerCase().replace(/\s+/, '_')
+        const quantile = d[field] === null ? "" : map_colors(d[field])
+
+        return `topo province ${province_key} ${quantile}`
       })
   }
 
