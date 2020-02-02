@@ -389,7 +389,8 @@ class Mapper {
 
     let xFirst = x_values[0].toDate()
     let xLast = [...x_values].pop().toDate()
-    let xMin = x_values[0].startOf("week").toDate()
+    // let xMin = x_values[0].startOf("week").toDate()
+    const xMin = moment("2020-01-21 12:00").toDate()
     let xMax = [...x_values].pop().endOf("week").toDate()
 
     this.x = d3.scaleTime()
@@ -589,7 +590,7 @@ class Mapper {
     this.x_label = x_label
     this.tooltip.select(".tooltip_updated_at").text(this.x_label)
 
-    const dateCaption = moment(this.x_label).strftime("%d %B %Y %H:%M")
+    const dateCaption = moment(this.x_label).strftime("%d %B %Y %H:%M UTC-5")
     d3.selectAll(".x-date").text(dateCaption)
 
     const bounds = this.brush_bounds(x_label).map(this.x)
