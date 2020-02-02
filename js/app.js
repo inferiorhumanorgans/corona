@@ -79,10 +79,9 @@ class Database {
 }
 
 class StackedArea {
-  set_source(data, series, chart_region) {
+  set_source(data, series) {
     this.data = data
     this.series = series
-    this.chart_region = chart_region
 
     // Calculate a lookup table
     this.data_lookup = this.data.map(function(d) {
@@ -130,7 +129,7 @@ class StackedArea {
 
     let last = [...this.data].pop()
     let last_date = moment(last.x_label).strftime("%b %d, %Y %H:%M")
-    this.title.html(`2019-nCoV Incidence <tspan class='toggle_region' onclick='javascript:toggle_region()'>${this.chart_region}</tspan> as of ${last_date}`)
+    this.title.html(`2019-nCoV <tspan class='toggle_region' onclick='javascript:toggle_category()'>${this.profile.category}</tspan> <tspan class='toggle_region' onclick='javascript:toggle_region()'>${this.profile.adjective}</tspan> as of ${last_date}`)
 
     // Update X
     this.maxTime = moment(last.x_label).endOf("week")
@@ -279,9 +278,11 @@ class StackedArea {
   }
 
   set_profile(db, profile) {
-    switch (profile) {
+    let adjective
+
+    switch (profile.name) {
       case "china": {
-        let data = db.query(Queries.CHINA_REGIONAL)
+        let data = db.query(Queries.CHINA_REGIONAL.replace(/%{category}/g, profile.category))
         this.set_source(
           data,
           [
@@ -291,13 +292,13 @@ class StackedArea {
             "northwest_china",
             "northeast_china",
             "southwest_china",
-          ],
-          "in China",
+          ]
         )
-        break;
+        adjective = "in China"
+        break
       }
       case "all": {
-        let data = db.query(Queries.ALL_REGIONS)
+        let data = db.query(Queries.ALL_REGIONS.replace(/%{category}/g, profile.category))
         this.set_source(data, [
           // "china",
           "east_asia",
@@ -313,15 +314,18 @@ class StackedArea {
           "north_america",
           "south_america",
           "other"
-        ], "Outside China");
-        break;
+        ])
+        adjective = "Outside China"
+        break
       }
       default: {
-        throw(`Profile '${profile}' not found`)
+        throw(`Profile '${JSON.stringify(profile)}' not found`)
       }
     }
-    this.profile = profile
+
+    this.profile = Object.assign(profile, { adjective })
     this.draw()
+
     return true
   }
 

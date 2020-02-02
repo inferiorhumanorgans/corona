@@ -15,14 +15,44 @@
 
     <script lang="javascript">
       function toggle_region(event) {
-        switch (chart.profile) {
+        const defaults = { name: "china", category: "confirmed" }
+        let name
+
+        switch (chart.profile.name) {
           case "china":
-            chart.set_profile(db, "all")
-            return;
+            name = "all"
+            break
           case "all":
-            chart.set_profile(db, "china")
-            return;
+            name = "china"
+            break
+          default:
+            console.error("Unknown chart profile specified", chart.profile.name)
+            return
         }
+
+        chart.set_profile(db, Object.assign(defaults, chart.profile, { name }))
+      }
+
+      function toggle_category(event) {
+        const defaults = { name: "all", category: "confirmed" }
+        let category
+
+        switch (chart.profile.category) {
+          case "confirmed":
+            category = "deaths"
+            break
+          case "deaths":
+            category = "recovered"
+            break
+          case "recovered":
+            category = "confirmed"
+            break
+          default:
+            console.error("Unknown profile category selected", chart.profile.category)
+            return
+        }
+
+        chart.set_profile(db, Object.assign(defaults, chart.profile, { category }))
       }
 
       const SETTINGS = {
@@ -44,7 +74,7 @@
           chart.draw()
         }
 
-        chart.set_profile(db, 'china')
+        chart.set_profile(db, { name: "china", category: "confirmed"})
         chart.draw()
       })
 </script>

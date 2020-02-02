@@ -21,7 +21,7 @@ Queries.ALL_REGIONS = `
   FROM (
     SELECT
       updated_at,
-      SUM(IFNULL(confirmed, 0)) AS count,
+      SUM(IFNULL(%{category}, 0)) AS count,
       region
     FROM cases, iso_countries
     WHERE iso_countries.alpha_2 = country
@@ -77,7 +77,7 @@ Queries.CHINA_REGIONAL = `
     SELECT
       country,
       updated_at,
-      SUM(IFNULL(confirmed, 0)) AS count,
+      SUM(IFNULL(%{category}, 0)) AS count,
       region
     FROM cases, china_provinces
     WHERE country = 'CN' AND province = china_provinces.name
