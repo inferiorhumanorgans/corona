@@ -361,7 +361,7 @@ class Mapper {
 
     // Zero out the provinces in case we have gaps in the data
     d3.selectAll('.topo.province')
-      .attr("class", "topo province")
+      .attr("class", d=> `topo province ${d.province.toLocaleLowerCase().replace(/\s+/, '_')}`)
       .attr("data-count", null)
       .attr("data-field", null)
 
