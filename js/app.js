@@ -223,8 +223,12 @@ class StackedArea {
       chart.tooltip
         .interrupt()
         .transition(transition)
+        .on("end", function() {
+          d3.select(this)
+            .style("display", "none")
+            .style("visibility", "hidden")
+        })
         .style("opacity", 0)
-
   }
 
   tooltip_handler(chart) {
@@ -277,6 +281,7 @@ class StackedArea {
 
     chart.tooltip
       .interrupt()
+      .style("display", null)
       .style("visibility", "visible")
       .style("opacity", 1)
       .style("top", `${yPos}px`)
@@ -747,6 +752,11 @@ class Mapper {
     tooltip
       .interrupt()
       .transition(transition)
+      .on("end", function() {
+        d3.select(this)
+          .style("display", "none")
+          .style("visibility", "hidden")
+      })
       .style("opacity", 0)
   }
 
@@ -795,6 +805,7 @@ class Mapper {
       .style("top", `${yPos}px`)
       .style("left", `${xPos}px`)
       .style("opacity", 1)
+      .style("display", null)
       .style("visibility", "visible")
   }
 }
