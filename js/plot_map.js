@@ -183,6 +183,7 @@ class Mapper {
     let tooltip_hide = this.tooltip_hide
     let tooltip = this.tooltip
 
+    let self = this
     node.selectAll(`path.${feature}`)
         .data(topo.features, d => d.province)
         .enter()
@@ -193,7 +194,7 @@ class Mapper {
           .attr("d", this.path)
           .attr("data-name", feature)
           .on("mousemove", function(datum, index, group) {
-            tooltip_handler.call(this, group, tooltip)
+            tooltip_handler(this, self, tooltip)
           })
           .on("mouseout", function(datum, index, group) {
             tooltip_hide.call(this, group, tooltip)
@@ -374,6 +375,11 @@ class Mapper {
 
         return `topo province ${province_key} ${quantile}`
       })
+
+    const tooltip = d3.select('.map.tooltip')
+    if (tooltip.attr("data-province")) {
+      this._tooltip_refresh_data(tooltip)
+    }
   }
 
   tooltip_hide(group, tooltip) {
@@ -395,32 +401,24 @@ class Mapper {
       .style("opacity", 0)
   }
 
-  tooltip_handler(group, tooltip) {
-    let node = d3.select(this)
-    const province_name = node.attr("data-name")
-    const province = CHINA_PROVINCES[province_name] || EURO_COUNTRIES[province_name]
+  _tooltip_refresh_data(tooltip) {
+    const province_key = tooltip.attr("data-province")
+    const province = d3.select(`.province.${province_key}`)
+    const province_name = (CHINA_PROVINCES[province_key] || EURO_COUNTRIES[province_key]).name
 
-    let bounds = tooltip.node().getBoundingClientRect();
-
-    let pageX = d3.event.pageX;
-    let pageY = d3.event.pageY;
-    let xPos = pageX + 10;
-    let yPos;
-
-    if ((5 + pageY + bounds.height) > window.innerHeight) {
-      yPos = window.innerHeight - 10 - bounds.height
-    } else {
-      yPos = 5 + pageY
+    const data = {
+      count: province.attr("data-count"),
+      field: province.attr("data-field"),
     }
 
-    tooltip.selectAll(".tooltip-province").text(province.name)
+    tooltip.selectAll(".tooltip-province").text(province_name)
     tooltip.selectAll(".tooltip-category").style("display", null)
 
-    if (!node.attr("data-field") || node.attr("data-count") === null) {
+    if (!data.field || data.count === null) {
       tooltip.selectAll(".tooltip-count").text("No data")
       tooltip.selectAll(".tooltip-category").style("display", "none")
-    } else if (node.attr("data-field").match(/_ratio$/)) {
-      let value = node.attr("data-count")
+    } else if (data.field.match(/_ratio$/)) {
+      let value = data.count
       let count
 
       if (value) {
@@ -431,9 +429,31 @@ class Mapper {
 
       tooltip.selectAll(".tooltip-count").text(count)
     } else {
-      let count = formatNumber(node.attr("data-count"))
+      let count = formatNumber(data.count)
       tooltip.selectAll(".tooltip-count").text(count)
     }
+  }
+
+  tooltip_handler(event_node, chart, tooltip) {
+    let node = d3.select(event_node)
+    const province_name = node.attr("data-name")
+
+    let bounds = tooltip.node().getBoundingClientRect();
+
+    let pageX = d3.event.pageX
+    let pageY = d3.event.pageY
+    let xPos = pageX + 10
+    let yPos
+
+    if ((5 + pageY + bounds.height) > window.innerHeight) {
+      yPos = window.innerHeight - 10 - bounds.height
+    } else {
+      yPos = 5 + pageY
+    }
+
+    tooltip.attr("data-province", province_name)
+
+    chart._tooltip_refresh_data(tooltip)
 
     tooltip
       .interrupt()
