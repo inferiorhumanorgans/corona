@@ -15,6 +15,8 @@ dist: assets
 	@echo "Looking for newest SQL data"
 	@echo "Copying SQL '$(sql_source)'"
 	@cp $(sql_source) data/nCoV.sqlite3
+	@echo "Appending metadata"
+	@sqlite3 data/nCoV.sqlite3 < assets/geo/meta/iso.sql
 
 assets:
 	@echo "Generating stylesheet"
