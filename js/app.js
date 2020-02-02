@@ -96,19 +96,7 @@ class StackedArea {
       }, 0)
     })
 
-    let multiple;
-    if (this.data_max > this.yAxisMultiple) {
-      multiple = this.yAxisMultiple * 2;
-    } else {
-      multiple = this.yAxisMultiple;
-    }
-
-    this.yMax = (Math.ceil(this.data_max / multiple) * multiple) + multiple;
-    if (this.yMax === 0) {
-      this.yMax = multiple;
-    }
-
-    this.y.domain([0, this.yMax]);
+    this.y.domain([0, this.data_max]);
   }
 
   set_dimensions() {
@@ -161,7 +149,7 @@ class StackedArea {
     d3.select("text.subtitle").attr("dy", `${titleBounding.bottom}px`);
 
     // Draw Y-axis
-    let yAxis = d3.axisRight(this.y)
+    let yAxis = d3.axisRight(this.y.nice())
       .tickSize(-this.width)
       .tickFormat(function(d) { return `${formatNumber(d)}`; });
 
@@ -462,7 +450,6 @@ class Mapper {
     this.handle = this.slider.insert("g")
       .attr("class", "brush")
       .call(brush)
-      // .call(brush.move, this.brush_bounds(center).map(x))
     d3.selectAll(".brush .handle").remove()
 
     this.map.insert("g")
@@ -648,7 +635,6 @@ class Mapper {
       }))
     }, [])
 
-    // this.map_colors.domain([0, d3.max(all_values)])
     this.map_colors.domain(all_values).range([
       "level1",
       "level2",
@@ -660,8 +646,6 @@ class Mapper {
       "level8",
       "level9"
     ])
-
-    // this.map_colors.domain(bars.map(bar => bar[field]))
   }
 
   refresh() {
