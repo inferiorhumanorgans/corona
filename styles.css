@@ -260,6 +260,7 @@ h2, h3 {
 
 .map.plot .maptick {
   stroke: #1b191d;
+  shape-rendering: crispEdges;
 }
 
 .map.plot .track,

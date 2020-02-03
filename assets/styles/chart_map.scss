@@ -19,6 +19,7 @@
   
     .maptick {
       stroke: settings.$blackish;
+      shape-rendering: crispEdges;
     }
     
     /* Slider */
