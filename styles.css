@@ -240,6 +240,12 @@ h2, h3 {
   overflow: hidden;
 }
 
+body.chart p {
+  padding-left: 20px;
+  margin-top: 0;
+  line-height: 130%;
+}
+
 .container.map {
   display: inline-block;
   position: relative;

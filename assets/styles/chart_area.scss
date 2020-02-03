@@ -8,3 +8,11 @@
   vertical-align: top;
   overflow: hidden;
 }
+
+body.chart {
+  p {
+    padding-left: 20px;
+    margin-top: 0;
+    line-height: 130%;
+  }
+}
