@@ -21,6 +21,16 @@ function format_series(s) {
   }
 }
 
+function toggle_about() {
+  const about = d3.select(".about")
+
+  if (about.style("display") == "block") {
+    about.style("display", null)
+  } else {
+    about.style("display", "block")
+  }
+}
+
 class Database {
   constructor(path) {
     this.db_path = path
@@ -412,7 +422,7 @@ window.addEventListener("keydown", event => {
   }
 
   if (event.key == "?") {
-    d3.select(".about").style("display", "block")
+    toggle_about()
     return
   } else if (event.key == "Escape") {
     d3.select(".about").style("display", null)

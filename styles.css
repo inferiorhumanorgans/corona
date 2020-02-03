@@ -175,8 +175,9 @@ a:hover {
     font-size: 6pt;
   }
 }
-.toggle_region {
+.toggle {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 .control {
@@ -222,6 +223,14 @@ h2, h3 {
   position: fixed;
   display: none;
   line-height: 130%;
+  overflow-y: auto;
+  z-index: 500;
+}
+
+.about-link {
+  font-family: "DejaVu Mono";
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .svg-content-responsive {
