@@ -61,17 +61,20 @@
   <body>
     <h2 style="line-height: 130%; text-align: center">2019-nCoV Cases in China</h2>
     <h3 style="line-height: 100%;"><span class="x-date"></span></h3>
-    <div style="width: 100%">
-      <svg class="plot map"></svg>
+    <div>
+      <div class="container map">
+        <svg class="plot map svg-content-responsive"></svg>
+      </div>
     </div>
     <div>
       <center>
+        <div class="summary" style="margin-bottom: 0"></div>
         <ul class="map legend"></ul>
         <div class="map controls">
           <span class="enabled">type:</span> [<a class="control confirmed" href="javascript:map.set_field('confirmed');map.refresh()">confirmed cases</a>]
           [<a class="control deaths" href="javascript:map.set_field('deaths');map.refresh()">deaths</a>]
           [<a class="control recovered" href="javascript:map.set_field('recovered');map.refresh()">recoveries</a>]
-          [<a class="control death_ratio" href="javascript:map.set_field('death_ratio');map.refresh()">case fatality ratio</a>]
+          [<a class="control death_ratio" href="javascript:map.set_field('death_ratio');map.refresh()">case fatality rate</a>]
           <span class="h-space">&nbsp;</span>
 
           <span class="enabled">other:</span>

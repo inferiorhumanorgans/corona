@@ -4,16 +4,15 @@ class Mapper {
     this.bars = bars
     this.features = features
 
-    this.width = window.innerWidth * 0.95
-    this.height = window.innerHeight - 200
+    this.width = 1500
+    this.height = 500
     this.margin = {top: 10, right: 20, bottom: 40, left: 20},
 
     this.map_colors = d3.scaleCluster()
 
     this.map = d3.select("svg.plot.map")
-        .attr("width", this.width)
-        .attr("height", this.height)
-        .style("left", window.innerWidth * 0.5)
+        .attr("preserveAspectRatio", "xMinYMin meet")
+        .attr("viewBox", `0 0 ${this.width} ${this.height}`)
         .append("g")
 
     this.tooltip = d3.select(".map.tooltip")
@@ -39,7 +38,7 @@ class Mapper {
 
     this.slider = this.map.append("g")
       .attr("class", "slider")
-      .attr("transform", `translate(${this.margin.left}, ${this.height - 20})`);
+      .attr("transform", `translate(${this.margin.left}, ${this.height - this.margin.bottom})`);
 
     this.slider.append("line")
       .attr("class", "track")
@@ -267,7 +266,7 @@ class Mapper {
     let field_description;
     switch (field) {
       case "death_ratio":
-        field_description = "estimated case fatality ratio"
+        field_description = "estimated case fatality rate"
         break;
       default:
         field_description = field
@@ -359,8 +358,38 @@ class Mapper {
 
     const map_colors = this.map_colors
 
+    let field_description
+    switch (field) {
+      case "confirmed":
+        field_description = "confirmed cases"
+        break
+      case "recovered":
+        field_description = "recoveries"
+        break
+      case "death_ratio":
+        field_description = "estimated case fatality rate"
+        break
+      default:
+        field_description = field
+        break
+    }
+
+    const maxN = d3.max(bars.map(function(b) {
+      return b[field]
+    }))
+
+    const n = bars.reduce(function(acc, b) {
+      return acc + b[field]
+    }, 0)
+
+    if (field.match(/_ratio$/)) {
+      d3.selectAll(".summary").text(`${field_description}, max=${formatNumber(maxN, { style: "percent" })}`)
+    } else {
+      d3.selectAll(".summary").text(`${field_description}, n=${formatNumber(n)}, max=${formatNumber(maxN)}`)
+    }
+
     // Zero out the provinces in case we have gaps in the data
-    d3.selectAll('.topo.province')
+    d3.selectAll(".topo.province")
       .attr("class", d=> `topo province ${d.province.toLocaleLowerCase().replace(/\s+/, '_')}`)
       .attr("data-count", null)
       .attr("data-field", null)

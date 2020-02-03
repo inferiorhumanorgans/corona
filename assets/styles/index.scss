@@ -116,7 +116,8 @@ a:hover {
 .y.axis line {
   stroke: settings.$blackish;
   stroke-opacity: 1;
-  shape-rendering: crispEdges;
+  // This doesn't seem to play well with scaling
+  // shape-rendering: crispEdges;
 }
 
 .y.axis .zero line {
@@ -228,6 +229,13 @@ h2, h3 {
   position: fixed;
   display: none;
   line-height: 130%;
+}
+
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
 }
 
 @include meta.load-css("chart_area");

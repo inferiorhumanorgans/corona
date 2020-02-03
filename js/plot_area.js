@@ -20,9 +20,10 @@ class StackedArea {
 
   set_dimensions() {
     this.margin = {top: 10, right: 40, bottom: 20, left: 20},
-    this.width = (window.innerWidth * 0.95) - this.margin.left - this.margin.right;
-    this.height = (window.innerHeight * 0.90) - this.margin.top - this.margin.bottom;
-    this.fullHeight = this.height + this.margin.top + this.margin.bottom;
+    this.fullWidth = 1200
+    this.fullHeight = 480
+    this.height = this.fullHeight - this.margin.top - this.margin.bottom
+    this.width = this.fullWidth - this.margin.left - this.margin.right
 
     this.x.range([0, this.width])
     this.y.range([this.height - this.margin.top - this.margin.bottom, 90])
@@ -31,9 +32,10 @@ class StackedArea {
   draw() {
     let self = this
     d3.select("svg.plot.chart").selectAll("*").remove()
+
     this.svg = d3.select("svg.plot.chart")
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .attr("preserveAspectRatio", "xMinYMin meet")
+      .attr("viewBox", `0 0 ${this.fullWidth} ${this.fullHeight}`)
       .append("g")
       .attr("class", "svg-body")
       .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`)
@@ -56,9 +58,12 @@ class StackedArea {
     this.x.domain([this.minTime.toDate(), this.maxTime.toDate()])
 
     let lastD = [...this.data].pop()
-    let maxN = this.series.reduce(function(acc, s) {
-      return acc + lastD[s]
+    const series = this.series
+    let maxN = d3.max(this.data.map(function(d) {
+      return series.reduce(function(acc, s) {
+        return acc + d[s]
       }, 0)
+    }, 0))
     this.subtitle.text(`max = ${formatNumber(maxN)}`)
     
     document.querySelector("text.title").style=`font-size: ${this.fullHeight * this.titleFactor}px`;

@@ -70,18 +70,17 @@
 
         chart = new StackedArea()
 
-        window.onresize = function() {
-          chart.set_dimensions()
-          chart.draw()
-        }
-
         chart.set_profile(db, { name: "china", category: "confirmed"})
         chart.draw()
       })
-</script>
+    </script>
   </head>
   <body>
-    <svg class="plot chart"></svg>
+    <div>
+      <div class="container chart">
+        <svg class="plot chart svg-content-responsive"></svg>
+      </div>
+    </div>
     <p style="padding-left: 20px; margin-top: 0">
       Data sourced from Johns Hopkins University's <a href="https://systems.jhu.edu/" target="_blank">Center for Systems Science and Engineering</a>.
       All times local to U.S. East Coast.  Maps are <a href="map.html">over here</a>.

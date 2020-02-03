@@ -112,7 +112,6 @@ a:hover {
 .y.axis line {
   stroke: #1b191d;
   stroke-opacity: 1;
-  shape-rendering: crispEdges;
 }
 
 .y.axis .zero line {
@@ -225,6 +224,31 @@ h2, h3 {
   line-height: 130%;
 }
 
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0;
+}
+
+.container.chart {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 40%;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.container.map {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 33.33%;
+  vertical-align: top;
+  overflow: hidden;
+}
+
 .map.plot {
   /* border: 1px solid #ccc; */
   /* position: absolute; */
@@ -275,6 +299,10 @@ h2, h3 {
 .map.plot .overlay {
   pointer-events: none;
   fill: none;
+}
+
+.map.legend {
+  margin-top: 0;
 }
 
 .map.legend li {

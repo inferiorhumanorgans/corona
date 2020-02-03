@@ -1,2 +1,10 @@
 // .chart.tooltip {
 // }
+.container.chart {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 40%;
+  vertical-align: top;
+  overflow: hidden;
+}
