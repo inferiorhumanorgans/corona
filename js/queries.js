@@ -24,7 +24,15 @@ Queries.ALL_REGIONS = `
       SUM(IFNULL(%{category}, 0)) AS count,
       region
     FROM cases, iso_countries
-    WHERE iso_countries.alpha_2 = country
+    WHERE
+      iso_countries.alpha_2 = country AND
+      (
+        (
+          updated_at < '2020-02-01 20:00' OR
+          ((STRFTIME('%H', updated_at) % 4 = 0) AND (STRFTIME('%M', updated_at) = '30'))
+        ) OR
+        updated_at = (SELECT MAX(updated_at) FROM cases)
+      )
     GROUP BY updated_at, region
     ORDER BY updated_at ASC, region ASC
   )
@@ -59,7 +67,12 @@ Queries.CHINA_PROVINCIAL = `
         ELSE (IFNULL(deaths, 0) + IFNULL(recovered, 0))
       END AS known
     FROM cases
-    WHERE country = 'CN'
+    WHERE
+      country = 'CN'
+      -- If we comment this out and keep all the twice hourly updates
+      -- we get smaller bins and a little more precision as a result
+      AND
+      ((updated_at < '2020-02-01 20:00' OR STRFTIME('%M', updated_at) = '00') OR updated_at = (SELECT MAX(updated_at) FROM cases))
     ORDER BY updated_at
   )
 `
@@ -80,7 +93,16 @@ Queries.CHINA_REGIONAL = `
       SUM(IFNULL(%{category}, 0)) AS count,
       region
     FROM cases, china_provinces
-    WHERE country = 'CN' AND province = china_provinces.name
+    WHERE
+      country = 'CN' AND
+      province = china_provinces.name AND
+      (
+        (
+          updated_at < '2020-02-01 20:00' OR
+          ((STRFTIME('%H', updated_at) % 4 = 0) AND (STRFTIME('%M', updated_at) = '30'))
+        ) OR
+        updated_at = (SELECT MAX(updated_at) FROM cases)
+      )
     GROUP BY updated_at, region
     ORDER BY updated_at ASC, region ASC)
   GROUP BY updated_at
@@ -167,7 +189,9 @@ Queries.EUROPE_BY_COUNTRY = `
           ELSE (IFNULL(deaths, 0) + IFNULL(recovered, 0))
         END AS known
       FROM cases
-      WHERE country IN ('AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'GR', 'HU', 'IS', 'IE', 'IT', 'KZ', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB', 'VA')
+      WHERE
+        country IN ('AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'GR', 'HU', 'IS', 'IE', 'IT', 'KZ', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB', 'VA') AND
+        (updated_at < '2020-02-01 20:00' OR STRFTIME('%M', updated_at) = '30')
       ORDER BY updated_at
     )
 `
