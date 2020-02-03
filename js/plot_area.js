@@ -64,7 +64,12 @@ class StackedArea {
         return acc + d[s]
       }, 0)
     }, 0))
-    this.subtitle.text(`max = ${formatNumber(maxN)}`)
+
+    if (maxN) {
+      this.subtitle.text(`max = ${formatNumber(maxN)}`)
+    } else {
+      this.subtitle.text("")
+    }
     
     document.querySelector("text.title").style=`font-size: ${this.fullHeight * this.titleFactor}px`;
     document.querySelector("text.subtitle").style=`font-size: ${this.fullHeight * this.subtitleFactor}px`;

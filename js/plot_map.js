@@ -323,6 +323,10 @@ class Mapper {
       let range_string
       let lower_number, upper_number
 
+      if (!upper_bound) {
+        return ""
+      }
+
       if (field.match(/_ratio$/)) {
         lower_number = formatNumber(lower_bound, { style: "percent" })
         upper_number = formatNumber(upper_bound - 0.01, { style: "percent" })
@@ -382,11 +386,20 @@ class Mapper {
       return acc + b[field]
     }, 0)
 
-    if (field.match(/_ratio$/)) {
-      d3.selectAll(".summary").text(`${field_description}, max=${formatNumber(maxN, { style: "percent" })}`)
+    let summary = [field_description]
+
+    if (maxN) {
+      console.log("MaxN===", maxN)
+      if (field.match(/_ratio$/)) {
+        summary.push(`max=${formatNumber(maxN, { style: "percent" })}`)
+      } else {
+        summary.push(`n=${formatNumber(n)}`)
+        summary.push(`max=${formatNumber(maxN)}`)
+      }
     } else {
-      d3.selectAll(".summary").text(`${field_description}, n=${formatNumber(n)}, max=${formatNumber(maxN)}`)
+      summary.push("none reported")
     }
+    d3.selectAll(".summary").text(summary.join(", "))
 
     // Zero out the provinces in case we have gaps in the data
     d3.selectAll(".topo.province")
