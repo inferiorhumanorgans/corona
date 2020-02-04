@@ -111,6 +111,7 @@ Queries.CHINA_REGIONAL = `
 Queries.EUROPE_BY_COUNTRY = `
   SELECT
     x_label,
+    country AS name,
     province,
     confirmed,
     suspected,
@@ -127,6 +128,7 @@ Queries.EUROPE_BY_COUNTRY = `
     (
       SELECT
         updated_at AS x_label,
+        country,
         CASE
         WHEN country = 'AL' THEN	'Albania'
         WHEN country = 'AD' THEN	'Andorra'
@@ -190,8 +192,14 @@ Queries.EUROPE_BY_COUNTRY = `
         END AS known
       FROM cases
       WHERE
-        country IN ('AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'GR', 'HU', 'IS', 'IE', 'IT', 'KZ', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB', 'VA') AND
-        (updated_at < '2020-02-01 20:00' OR STRFTIME('%M', updated_at) = '30')
+        country IN ('AL', 'AD', 'AM', 'AT', 'AZ', 'BY', 'BE', 'BA', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'GE', 'GR', 'HU', 'IS', 'IE', 'IT', 'KZ', 'LV', 'LI', 'LT', 'LU', 'MT', 'MD', 'MC', 'ME', 'NL', 'MK', 'NO', 'PL', 'PT', 'RO', 'RU', 'SM', 'RS', 'SK', 'SI', 'ES', 'SE', 'CH', 'TR', 'UA', 'GB', 'VA', 'DE') AND
+        (
+          (
+            updated_at < '2020-02-01 20:00' OR
+            (STRFTIME('%M', updated_at) = '30')
+          ) OR
+          updated_at = (SELECT MAX(updated_at) FROM cases)
+        )
       ORDER BY updated_at
     )
 `
