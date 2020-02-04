@@ -126,6 +126,13 @@
                   .style("stroke", "#ccc")
                   .attr("d", sphere_path)
 
+              const country_meta = db.query("SELECT alpha_2, name FROM iso_countries").reduce(function(acc, c) {
+                return Object.assign(acc, { [c.alpha_2]: c.name})
+              }, {})
+              topo = topo.map(function(t) {
+                return Object.assign(t, { title: country_meta[t.name] })
+              })
+
               globe.append("g")
                 .attr("class", "countries")
                 .selectAll("path")
@@ -134,6 +141,7 @@
                   .append("path")
                     .attr("class", d => `country ${d.name}`)
                     .attr("data-name", d => d.name)
+                    .attr("data-title", d => d.title)
                     .on("mouseout", function(datum, index, group) {
                       d3.select(this)
                         .style("stroke", null)
@@ -145,7 +153,6 @@
                         .style("stroke", "red")
                         .style("stroke-width", "2px")
 
-                      d3.selectAll(".country-name").text(node.attr("data-name"))
                       d3.selectAll(".date").text(function () {
                         const date = moment(x_key)
                         return date.strftime("%d %B %Y %H:%M")
@@ -155,7 +162,10 @@
                       d3.selectAll(".count-recovered").text("0")
                       d3.selectAll(".count-deaths").text("0")
 
-                      const d = bar.filter(d => d.name == datum.name)[0]
+                      const name = node.attr("data-name")
+                      const title = node.attr("data-title")
+                      d3.selectAll(".country-name").text(title)
+                      const d = bar.filter(d => { return d.name == name })[0]
 
                       if (!d) {
                         return
