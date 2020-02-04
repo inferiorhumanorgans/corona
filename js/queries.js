@@ -203,3 +203,34 @@ Queries.EUROPE_BY_COUNTRY = `
       ORDER BY updated_at
     )
 `
+
+Queries.ALL_COUNTRIES = `
+  SELECT
+    x_label,
+    country AS name,
+    SUM(confirmed) AS confirmed,
+    SUM(suspected) AS suspected,
+    SUM(recovered) AS recovered,
+    SUM(deaths) AS deaths
+  FROM
+    (
+      SELECT
+        updated_at AS x_label,
+        country,
+        confirmed,
+        suspected,
+        recovered,
+        deaths
+      FROM cases
+      WHERE
+      (
+        (
+          updated_at < '2020-02-01 20:00' OR
+          (STRFTIME('%M', updated_at) = '30')
+        ) OR
+        updated_at = (SELECT MAX(updated_at) FROM cases)
+      )
+    ORDER BY updated_at
+    )
+  GROUP BY x_label, country;
+`

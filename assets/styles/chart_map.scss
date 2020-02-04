@@ -76,3 +76,37 @@
 .province {
   fill: #f0f0f0;
 }  
+
+.country {
+  fill: #f0f0f0;
+  stroke: settings.$blackish;
+  stroke-width: 0.5px;
+}
+
+.container.globe {
+  display: inline-block;
+  position: relative;
+  width: 60%;
+  padding-bottom: 48%;
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.globe table {
+  // border: 1px solid black;
+  float: right;
+  position: relative;
+  top: 0;
+  right: 5%;
+  margin-top: 1em;
+  width: 35%;
+
+  tbody {
+    tr > :first-child {
+      text-align: right;
+    }
+    tr > :first-child {
+      width: 50%;
+    }
+  }
+}

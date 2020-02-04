@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>2019-nCoV visualizations</title>
+    <meta http-equiv="content-type" content="text/html" charset="utf-8" />
+
+    <link rel="stylesheet" type="text/css" href = "styles.css?v=2020-02-01" />
+
+    <script lang="javascript" src="./dist/sql-wasm.js"></script>
+    <script lang="javascript" src="./dist/d3.v5.min.js"></script>
+    <script lang="javascript" src="./dist/d3-scale-cluster.min.js"></script>
+    <script lang="javascript" src="./dist/topojson.min.js"></script>
+    <script lang="javascript" src="./dist/versor.min.js"></script>
+    <script lang="javascript" src="./dist/moment.min.js"></script>
+    <script lang="javascript" src="./dist/moment-strftime.js"></script>
+    <script lang="javascript" src="./js/app.js?v=2020-02-01-01"></script>
+    <script lang="javascript" src="./js/queries.js?v=2020-02-01-01"></script>
+
+    <script lang="javascript">
+      const SETTINGS = {
+        locale: 'en-US',
+        db_path: './data/nCoV.sqlite3?v=2020-02-02-0330',
+        topo_path: './data/globe.simple.json?v=6',
+      }
+
+      const width = 1500
+      const height = 1200
+      const margin = {top: 10, right: 20, bottom: 40, left: 20};
+      const db = new Database(SETTINGS.db_path)
+    </script>
+  </head>
+  <body>
+    <h2 style="line-height: 130%; text-align: center">2019-nCoV Cases</h2>
+    <h3 style="line-height: 100%;"><span class="x-date"></span></h3>
+    <div class="globe">
+      <div class="container globe">
+        <svg class="plot map svg-content-responsive"></svg>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th class="country-name" colspan=2>Country</th>
+          </tr>
+          <tr>
+            <th class="date" colspan=2>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Confirmed</th>
+            <td class="count-confirmed">1,100</td>
+          </tr>
+          <tr>
+            <th>Recovered</th>
+            <td class="count-recovered">1,100</td>
+          </tr>
+          <tr>
+            <th>Dead</th>
+            <td class="count-deaths">1,100</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script type="text/javascript">
+      
+      db.load_data()
+        .then(() => {
+          let map;
+
+          d3.json(SETTINGS.topo_path)
+            .then((json) => {
+              console.log(json)
+              const countries = Object.keys(json.objects)
+              console.log(countries)
+
+              let map = d3.select("svg.plot.map")
+                .attr("preserveAspectRatio", "xMinYMin meet")
+                .attr("viewBox", `0 0 ${width} ${height}`)
+                .append("g")
+
+              let cprojection = d3.geoOrthographic()
+              .fitExtent(
+                [[margin.top, margin.left], [width - margin.left - margin.right, height - margin.top - margin.bottom]],
+                topojson.mesh(json))
+                .rotate([-97.47177385127553, -27.707325857263807, -13.39422945945587])
+              let sprojection = d3.geoOrthographic()
+              .fitExtent(
+                [[margin.top, margin.left], [width - margin.left - margin.right, height - margin.top - margin.bottom]],
+                topojson.mesh(json))
+
+              let sphere_path = d3.geoPath().projection(sprojection)
+              let country_path = d3.geoPath().projection(cprojection)
+
+              let topo = countries.reduce(function (acc, country) {
+                acc.push(
+                  Object.assign(
+                    topojson.feature(json, json.objects[country]),
+                    { name: country }
+                  )
+                )
+                return acc
+              }, [])
+
+              let globe = map.append("g")
+                .attr("class", "globe")
+                .call(d3.drag()
+                  .on("start", function() {
+                    this.v0 = versor.cartesian(cprojection.invert([d3.event.x, d3.event.y]))
+                    this.q0 = versor(this.r0 = cprojection.rotate())
+                  })
+                  .on("drag", function() {
+                    const v1 = versor.cartesian(cprojection.rotate(this.r0).invert([d3.event.x, d3.event.y]))
+                    const q1 = versor.multiply(this.q0, versor.delta(this.v0, v1))
+                    cprojection.rotate(versor.rotation(q1))
+                    globe.select(".countries").selectAll("path.country")
+                      .attr("d", country_path)
+                  }));
+
+              globe
+                .selectAll("path")
+                .data([{type: "Sphere"}])
+                .enter()
+                .append("path")
+                  .attr("class", "sphere")
+                  .style("fill", "lightblue")
+                  .style("stroke", "#ccc")
+                  .attr("d", sphere_path)
+
+              globe.append("g")
+                .attr("class", "countries")
+                .selectAll("path")
+                  .data(topo, d => d.name)
+                  .enter()
+                  .append("path")
+                    .attr("class", d => `country ${d.name}`)
+                    .attr("data-name", d => d.name)
+                    .on("mouseout", function(datum, index, group) {
+                      d3.select(this)
+                        .style("stroke", null)
+                        .style("stroke-width", null)
+                    })
+                    .on("mouseenter", function(datum, index, group) {
+                      const node = d3.select(this)
+                      node
+                        .style("stroke", "red")
+                        .style("stroke-width", "2px")
+
+                      d3.selectAll(".country-name").text(node.attr("data-name"))
+                      d3.selectAll(".date").text(function () {
+                        const date = moment(x_key)
+                        return date.strftime("%d %B %Y %H:%M")
+                      })
+
+                      d3.selectAll(".count-confirmed").text("0")
+                      d3.selectAll(".count-recovered").text("0")
+                      d3.selectAll(".count-deaths").text("0")
+
+                      const d = bar.filter(d => d.name == datum.name)[0]
+
+                      if (!d) {
+                        return
+                      }
+
+                      d3.selectAll(".count-confirmed").text(formatNumber(d.confirmed))
+                      d3.selectAll(".count-recovered").text(formatNumber(d.recovered))
+                      d3.selectAll(".count-deaths").text(formatNumber(d.deaths))
+                    })
+                    .attr("d", country_path);
+
+              let query_results = db.query(Queries.ALL_COUNTRIES);
+              let nest = d3.nest()
+                .key(function(d) {
+                  return d.x_label
+                })
+                .sortKeys(d3.ascending)
+              const bars = nest.object(query_results)
+              const x_key = Object.keys(bars).pop()
+              const field = "confirmed"
+              const bar = bars[x_key]
+
+              // const all_values = Object.values(bars).reduce(function(acc, date) {
+              //   return acc.concat(date.map(function(d) {
+              //     return d[field]
+              //   }))
+              // }, []).sort(d3.ascending).filter(d => d !== null)
+
+              const all_values = bar.map(d => d[field]).filter(d => d !== null)
+              console.log(all_values)
+
+              let color_scale = d3.scaleCluster().domain(all_values).range([
+                "level1",
+                "level2",
+                "level3",
+                "level4",
+                "level5",
+                "level6",
+                "level7",
+                "level8",
+                "level9"
+              ])
+
+              globe.select(".countries").selectAll("path")
+                .attr("data-count", d => {
+                  for (const n of bar) {
+                    if (n.name === d.name) {
+                      return n.confirmed
+                    }
+                  }
+                })
+                // .attr("d", )
+                // .attr("data-count", d => d.name)
+                .attr("class", function(d) {
+                  const node = d3.select(this)
+                  const count = node.attr("data-count")
+                  if (count) {
+                    console.log(d.name, count, color_scale(count))
+                    return `country ${color_scale(count)}`
+                  } else {
+                    return `country`
+                  }
+                })
+
+            })
+          })
+      </script>
+  </body>
+</html>
