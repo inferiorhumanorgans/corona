@@ -110,3 +110,10 @@
     }
   }
 }
+
+.country.active {
+  stroke: yellowgreen;
+  stroke-width: 5px;
+  stroke-opacity: 0.5;
+  filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+}

@@ -144,14 +144,12 @@
                     .attr("data-title", d => d.title)
                     .on("mouseout", function(datum, index, group) {
                       d3.select(this)
-                        .style("stroke", null)
-                        .style("stroke-width", null)
+                        .classed("active", false)
                     })
                     .on("mouseenter", function(datum, index, group) {
                       const node = d3.select(this)
                       node
-                        .style("stroke", "red")
-                        .style("stroke-width", "2px")
+                        .classed("active", true)
 
                       d3.selectAll(".date").text(function () {
                         const date = moment(x_key)
@@ -167,6 +165,17 @@
                       d3.selectAll(".country-name").text(title)
                       const d = bar.filter(d => { return d.name == name })[0]
 
+                      // Put our selection last so that our borders are drawn properly
+                      globe.select(".countries")
+                        .selectAll("path")
+                        .sort(function(a,b,c) {
+                          if (a.name === name) {
+                            return 1
+                          } else if (b.name === name) {
+                            return -1
+                          }
+                          return d3.ascending(a.name, b.name)
+                        })
                       if (!d) {
                         return
                       }
@@ -175,7 +184,7 @@
                       d3.selectAll(".count-recovered").text(formatNumber(d.recovered))
                       d3.selectAll(".count-deaths").text(formatNumber(d.deaths))
                     })
-                    .attr("d", country_path);
+                    .attr("d", country_path)
 
               let query_results = db.query(Queries.ALL_COUNTRIES);
               let nest = d3.nest()
@@ -195,7 +204,7 @@
               // }, []).sort(d3.ascending).filter(d => d !== null)
 
               const all_values = bar.map(d => d[field]).filter(d => d !== null)
-              console.log(all_values)
+              // console.log(all_values)
 
               let color_scale = d3.scaleCluster().domain(all_values).range([
                 "level1",
@@ -223,7 +232,6 @@
                   const node = d3.select(this)
                   const count = node.attr("data-count")
                   if (count) {
-                    console.log(d.name, count, color_scale(count))
                     return `country ${color_scale(count)}`
                   } else {
                     return `country`
