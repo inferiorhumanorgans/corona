@@ -75,6 +75,8 @@
 }
 .province {
   fill: #f0f0f0;
+  stroke: settings.$blackish;
+  stroke-width: 0.5px;
 }  
 
 .country {
@@ -111,7 +113,12 @@
   }
 }
 
-.country.active {
+.province.active {
+  // stroke: settings.$blackish;
+  stroke-width: 0.5px;
+}
+
+.active {
   stroke: yellowgreen;
   stroke-width: 5px;
   stroke-opacity: 0.5;

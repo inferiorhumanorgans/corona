@@ -328,6 +328,8 @@ body.chart p {
 
 .province {
   fill: #f0f0f0;
+  stroke: #1b191d;
+  stroke-width: 0.5px;
 }
 
 .country {
@@ -362,7 +364,11 @@ body.chart p {
   width: 50%;
 }
 
-.country.active {
+.province.active {
+  stroke-width: 0.5px;
+}
+
+.active {
   stroke: yellowgreen;
   stroke-width: 5px;
   stroke-opacity: 0.5;

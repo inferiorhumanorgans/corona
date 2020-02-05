@@ -187,8 +187,6 @@ class Mapper {
         .data(topo.features, d => d.province)
         .enter()
         .append("path")
-          .style("stroke", "black")
-          .style("stroke-width", "0.5px")
           .attr("class", `topo province ${feature}`)
           .attr("d", this.path)
           .attr("data-name", feature)
@@ -389,7 +387,6 @@ class Mapper {
     let summary = [field_description]
 
     if (maxN) {
-      console.log("MaxN===", maxN)
       if (field.match(/_ratio$/)) {
         summary.push(`max=${formatNumber(maxN, { style: "percent" })}`)
       } else {
@@ -426,7 +423,8 @@ class Mapper {
 
   tooltip_hide(group, tooltip) {
     let node = d3.select(this)
-    const province = node.attr("data-name")
+    // const province = node.attr("data-name")
+    node.classed("active", false)
 
     let transition = d3.transition()
       .duration(350)
@@ -477,8 +475,24 @@ class Mapper {
   }
 
   tooltip_handler(event_node, chart, tooltip) {
-    let node = d3.select(event_node)
+    const node = d3.select(event_node)
     const province_name = node.attr("data-name")
+
+    node.classed("active", true)
+
+    d3.selectAll(".topo.province")
+      .sort(function(a, b) {
+        const a_name = a.province.toLocaleLowerCase().replace(/\s+/, '_')
+        const b_name = b.province.toLocaleLowerCase().replace(/\s+/, '_')
+
+        if (a_name === province_name) {
+          return 1
+        } else if (b_name === province_name) {
+          return -1
+        }
+
+        return d3.ascending(a_name, b_name)
+      })
 
     let bounds = tooltip.node().getBoundingClientRect();
 
