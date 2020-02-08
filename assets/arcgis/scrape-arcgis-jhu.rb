@@ -7,8 +7,8 @@ require "open-uri"
 INFILE = "https://services1.arcgis.com/0MSEUqKaxRlEPj5g/arcgis/rest/services/ncov_cases/FeatureServer/1/query?f=json&where=1=1&returnGeometry=false&spatialRel=esriSpatialRelIntersects&outFields=*&orderByFields=Confirmed%20desc%2CCountry_Region%20asc%2CProvince_State%20asc&outSR=102100&resultOffset=0&resultRecordCount=250&cacheHint=true"
 
 now = DateTime.now
-outfile = File.join("/home/alex/corona", now.strftime("%Y-%m-%dT%H-%M-adj.sql"))
-raw_outfile = File.join("/home/alex/corona", now.strftime("%Y-%m-%dT%H-%M-adj.json"))
+outfile = File.join(ENV['HOME'], "corona", now.strftime("%Y-%m-%dT%H-%M-adj.sql"))
+raw_outfile = File.join(ENV['HOME'], "corona", now.strftime("%Y-%m-%dT%H-%M-adj.json"))
 
 # Account for JHU using local east coast time instead of UTC :(
 now = (now + (3/24.0)).strftime("%Y-%m-%dT%H:%MZ")
