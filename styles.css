@@ -255,6 +255,10 @@ body.chart p {
   line-height: 130%;
 }
 
+.tooltip_series_item {
+  opacity: 0.95;
+}
+
 .container.map {
   display: inline-block;
   position: relative;
@@ -372,7 +376,8 @@ body.chart p {
   stroke: yellowgreen;
   stroke-width: 5px;
   stroke-opacity: 0.5;
-  filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+  filter: drop-shadow(3px 3px 2px #1b191db2);
+  -webkit-filter: drop-shadow(3px 3px 2px #1b191db2);
 }
 
 .deaths {
@@ -466,23 +471,23 @@ body.chart p {
 }
 
 .middle_east {
-  fill: #01665e;
-  background: #01665e;
+  fill: #74add1;
+  background: #74add1;
 }
 
 .north_america {
-  fill: #003c30;
-  background: #003c30;
+  fill: #4575b4;
+  background: #4575b4;
 }
 
 .south_america {
-  fill: #003c30;
-  background: #003c30;
+  fill: #313695;
+  background: #313695;
 }
 
 .other {
-  fill: black;
-  background: black;
+  fill: #00362b;
+  background: #00362b;
 }
 
 .level1 {

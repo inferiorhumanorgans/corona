@@ -1,3 +1,5 @@
+@use "sass:color";
+@use "colorbrewer" as *;
 @use "settings";
 
 // .china {
@@ -60,24 +62,24 @@
 
 .middle_east
 {
-  fill: nth( settings.$palette_diverging_11, 10);
-  background: nth( settings.$palette_diverging_11, 10);
+  fill: nth( cbrew('RdYlBu', 11), 9);
+  background: nth( cbrew('RdYlBu', 11), 9);
 }
 
 .north_america
 {
-  fill: nth( settings.$palette_diverging_11, 11);
-  background: nth( settings.$palette_diverging_11, 11);
+  fill: nth( cbrew('RdYlBu', 11), 10);
+  background: nth( cbrew('RdYlBu', 11), 10);
 }
 
 .south_america
 {
-  fill: nth( settings.$palette_diverging_11, 11);
-  background: nth( settings.$palette_diverging_11, 11);
+  fill: nth( cbrew('RdYlBu', 11), 11);
+  background: nth( cbrew('RdYlBu', 11), 11);
 }
 
 .other
 {
-  fill: black;
-  background: black;
+  fill: color.scale(nth( settings.$palette_diverging_11, 11), $lightness: -10%);
+  background: color.scale(nth( settings.$palette_diverging_11, 11), $lightness: -10%);
 }
