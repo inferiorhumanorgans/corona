@@ -22,7 +22,7 @@ Queries.ALL_REGIONS = `
     SELECT
       updated_at,
       SUM(IFNULL(%{category}, 0)) AS count,
-      region
+      IFNULL(region, 'other') AS region
     FROM cases, iso_countries
     WHERE
       iso_countries.alpha_2 = country AND
