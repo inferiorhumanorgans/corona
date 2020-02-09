@@ -234,3 +234,25 @@ Queries.ALL_COUNTRIES = `
     )
   GROUP BY x_label, country;
 `
+
+Queries.PROPORTIONS = `
+  SELECT
+    CASE
+      WHEN country IN ('TW', 'HK', 'MO') THEN iso_countries.name
+      WHEN country = 'ZZ' THEN province
+      WHEN province IS NULL THEN iso_countries.name
+      ELSE province || ', ' || country
+    END AS locale,
+    country,
+    province,
+    SUM(IFNULL(confirmed, 0)) AS confirmed,
+    SUM(IFNULL(deaths, 0)) AS deaths,
+    SUM(IFNULL(recovered, 0)) AS recovered,
+    (confirmed - deaths - recovered) AS unknown
+  FROM cases, iso_countries
+  WHERE
+    updated_at = (SELECT MAX(updated_at) FROM cases) AND
+    iso_countries.alpha_2 = country
+  GROUP BY country, province
+  ORDER BY iso_countries.name ASC, province ASC;
+`
