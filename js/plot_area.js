@@ -51,7 +51,7 @@ class StackedArea {
 
     let last = [...this.data].pop()
     let last_date = moment(last.x_label).strftime("%b %d, %Y %H:%M")
-    this.title.html(`2019-nCoV <tspan class='toggle' onclick='javascript:toggle_category()'>${this.profile.category}</tspan> <tspan class='toggle' onclick='javascript:toggle_region()'>${this.profile.adjective}</tspan> as of ${last_date}`)
+    this.title.html(`COVID-19 <tspan class='toggle' onclick='javascript:toggle_category()'>${this.profile.category}</tspan> <tspan class='toggle' onclick='javascript:toggle_region()'>${this.profile.adjective}</tspan> as of ${last_date}`)
 
     // Update X
     this.maxTime = moment(last.x_label).endOf("week")
