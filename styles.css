@@ -535,4 +535,26 @@ body.chart p {
   background-color: #00441b;
 }
 
+.png-canvas {
+  display: none;
+  image-rendering: pixelated;
+}
+
+.png-img {
+  display: none;
+}
+
+.png-download-container {
+  cursor: pointer;
+  position: relative;
+  float: none;
+  width: 100%;
+  z-index: 99999;
+  bottom: 0;
+}
+
+#download {
+  z-index: 99999;
+}
+
 /*# sourceMappingURL=styles.css.map */

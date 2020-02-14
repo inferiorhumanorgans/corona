@@ -51,7 +51,7 @@ class StackedArea {
 
     let last = [...this.data].pop()
     let last_date = moment(last.x_label).strftime("%b %d, %Y %H:%M")
-    this.title.html(`COVID-19 <tspan class='toggle' onclick='javascript:toggle_category()'>${this.profile.category}</tspan> <tspan class='toggle' onclick='javascript:toggle_region()'>${this.profile.adjective}</tspan> as of ${last_date}`)
+    this.title.html(`COVID-19 <tspan class='toggle category' onclick='javascript:toggle_category()'>${this.profile.category}</tspan> <tspan class='toggle region' onclick='javascript:toggle_region()'>${this.profile.adjective}</tspan> as of <tspan class="x-date">${last_date} UTC-5</tspan>`)
 
     // Update X
     this.maxTime = moment(last.x_label).endOf("week")
@@ -73,6 +73,7 @@ class StackedArea {
     
     document.querySelector("text.title").style=`font-size: ${this.fullHeight * this.titleFactor}px`;
     document.querySelector("text.subtitle").style=`font-size: ${this.fullHeight * this.subtitleFactor}px`;
+    d3.select("#download").attr("data-title", `COVID-19 cases ${d3.select(".toggle.region").text()} as of ${d3.select(".x-date").text().replace(/:/g, "H")}`)
 
     let titleBounding = document.querySelector("text.title").getBoundingClientRect();
     d3.select("text.subtitle").attr("dy", `${titleBounding.bottom}px`);
@@ -130,6 +131,240 @@ class StackedArea {
         .attr("d", line)
         .on("mousemove", function() { self.tooltip_handler.call(this, self) })
         .on("mouseout", self.tooltip_hide)
+
+      this.render_canvas()
+  }
+
+  render_canvas() {
+    const touch_up = function(root, dimensions) {
+      console.log("touchup", this)
+      const category_node = root.select(".toggle.category")
+      switch (category_node.text()) {
+        case "confirmed":
+          category_node.text("confirmed cases")
+          break
+      }
+
+      root.selectAll(".title")
+        .attr("x", dimensions.width / 2)
+        // .style("fill", "red")
+
+      root.selectAll(".subtitle")
+        .attr("dx", 0)
+
+      if (d3.select(".toggle.region").text().match(/in China/i)) {
+        this.canvas_draw_china_legend(root, dimensions)
+      } else {
+        this.canvas_draw_row_legend(root, dimensions)
+      }
+    }
+
+    PngRender.render(
+      document.querySelector("svg"),
+      {
+        height: 525,
+        width: 1200
+      },
+      (root, dimensions) => touch_up.call(this, root, dimensions)
+    )
+  }
+
+  canvas_draw_row_legend(parent, dimensions) {
+    const base_height = dimensions.height
+
+    if (typeof(dimensions) === "undefined") {
+      console.error("SVG dimensions weren't specified for canvas_draw_row_legend")
+      return
+    }
+
+    const regions = [
+      [
+        "north_america",
+        "south_america",
+        "other",
+      ],
+      [
+        "east_asia",
+        "southeast_asia",
+        "central_asia",
+        "south_asia",
+      ],
+      [
+        "eastern_europe",
+        "central_europe",
+        "western_europe",
+        "northern_europe",
+        "southern_europe",
+        "middle_east",
+      ],
+    ]
+
+    const table = parent.append("g").style("transform", `translate(0, ${base_height - this.margin.bottom - this.margin.top - this.raster_legend_height}px)`)
+    const rows = table.selectAll("g")
+      .data(regions)
+      .enter()
+      .append("g")
+      .attr("class", "region-row")
+      .style("font-size", this.raster_small_font_size)
+      .style("transform", (d, i) => `translate(3em, ${1.2 * i}em)`)
+
+    rows.selectAll("g")
+      .data(function(d) { return d; })
+      .enter()
+      .append("g")
+        .attr("class", "region-cell")
+        .attr("data-region", d => d)
+
+    rows.selectAll("g.region-cell")
+      .append("rect")
+      .attr("width", this.raster_legend_swatch.width)
+      .attr("height", this.raster_legend_swatch.height)
+      .attr("class", d => `area ${d}`)
+      .style("transform", (d, i) => `translate(calc(${i} * ${this.raster_legend_entry.width}`)
+      .style("stroke", this.black)
+      .style("stroke-width", "0.25px")
+
+    rows.selectAll("g.region-cell")
+      .append("text")
+      .style("transform", (d, i) => `translate(calc((${i} * ${this.raster_legend_entry.width}) + 0.75em + ${this.raster_legend_swatch.width}), ${this.raster_legend_entry.height})`)
+      .text((d, i) => d)
+  }
+
+  canvas_draw_china_legend(parent, dimensions) {
+    if (typeof(dimensions) === "undefined") {
+      console.error("SVG dimensions weren't specified for canvas_draw_china_legend")
+      return
+    }
+
+    const base_height = dimensions.height
+
+    const regions = [
+      "south_central_china",
+      "east_china",
+      "north_china",
+      "northwest_china",
+      "northeast_china",
+      "southwest_china",
+    ]
+
+    let legend = parent.append("g")
+      .selectAll("g")
+      .data(regions)
+      .enter()
+      .append("g")
+      .style("transform", (d, i) => `translate(calc(${this.margin.left}px + ${i * 20.125}em), ${base_height - this.margin.bottom - this.margin.top - this.raster_legend_height}px)`)
+      .style("font-size", this.raster_small_font_size)
+      .style("-moz-osx-font-smoothing", "grayscale")
+
+    legend.append("rect")
+      .attr("y", "-0.75em")
+      .attr("class", d => d)
+      .attr("stroke", this.black)
+      .attr("stroke-width", "0.5px")
+      .attr("fill", "red")
+      .attr("width", this.raster_legend_swatch.width)
+      .attr("height", this.raster_legend_swatch.height)
+
+    legend.append("text")
+      .attr("x", "3em")
+      .html(function (d) {
+        const provinces = {
+          east_china: [
+            [
+              "Anhui",
+              "Fujian",
+              "",
+            ],
+            [
+              "Jiangsu",
+              "Jiangxi",
+              "",
+            ],
+            [
+              "Shandong",
+              "Shanghai",
+              "Zhejiang",
+            ]
+          ],
+          north_china: [
+            [
+              "Beijing",
+              "Hebei",
+              "",
+            ],
+            [
+              "Inner Mongolia",
+              "",
+            ],
+            [
+              "Shanxi",
+              "Tianjin",
+            ]
+          ],
+          northeast_china: [
+            [
+              "Heilongjiang",
+              "",
+            ],
+            [
+              "Jilin",
+              "Liaoning",
+            ]
+          ],
+          northwest_china: [
+            [
+              "Gansu",
+              "Ningxia",
+              "",
+            ],
+            [
+              "Qinghai",
+              "Shaanxi",
+              "",
+            ],
+            [
+              "Xinjiang",
+            ]
+          ],
+          south_central_china: [
+            [
+              "Guangdong",
+              "",
+            ],
+            [
+              "Guangxi",
+              "Hainan",
+              "",
+            ],
+            [
+              "Henan",
+              "Hubei",
+              "Hunan",
+            ],
+          ],
+          southwest_china: [
+            [
+              "Chongqing",
+              "Guizhou",
+              "",
+            ],
+            [
+              "Sichuan",
+              "Tibet",
+              "Yunnan",
+            ],
+          ]
+        }
+        return `<tspan class="china-region">${format_series(d)}</tspan><tspan dy="1.25em" x="3em" >${
+          provinces[d].map((p, i) => {
+            return `<tspan x="3em" dy="1.0125em">${p.join(", ")}</tspan>`
+          }).join("")
+        }</tspan>`
+      })
+  }
+
+  canvas_legend_china() {
+
   }
 
   tooltip_hide() {
@@ -155,7 +390,6 @@ class StackedArea {
     let i = bisectDate(chart.data, actual_date, 1)
     let datum = chart.data[i]
 
-    // console.log(chart.series)
     chart.tooltip.selectAll("li").remove()
     chart.tooltip.select(".tooltip_series")
       .selectAll(".tooltip_series_item")
@@ -260,6 +494,12 @@ class StackedArea {
   }
 
   constructor() {
+    this.raster_area_opacity = 0.95
+    this.raster_legend_height = 15
+    this.raster_small_font_size = "10px"
+    this.raster_legend_swatch = { width: "2.5em", height: "1em" }
+    this.raster_legend_entry = { width: "15em", height: "0.75em" }
+
     this.minTime = moment("2020-01-22 00:00")
     this.maxTime = moment("2020-02-01 00:00")
 

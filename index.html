@@ -10,6 +10,7 @@
     <script lang="javascript" src="./dist/topojson.min.js"></script>
     <script lang="javascript" src="./js/queries.js"></script>
     <script lang="javascript" src="./js/app.js?v=2020-02-01-01"></script>
+    <script lang="javascript" src="./js/png_render.js?v=2020-02-13-01"></script>
     <script lang="javascript" src="./js/plot_area.js?v=2020-02-02-01"></script>
 
     <link rel="stylesheet" type="text/css" href = "styles.css?v=2020-02-01" />
@@ -81,6 +82,11 @@
         <svg class="plot chart svg-content-responsive"></svg>
       </div>
     </div>
+    <canvas class="png-canvas"></canvas>
+    <img class="png-img" />
+    <div class="png-download-container">
+      <a id="download">download png</a>
+    </div>
     <p>
       Data sourced from Johns Hopkins University's <a href="https://systems.jhu.edu/" target="_blank">Center for Systems Science and Engineering</a>.
       All times local to U.S. East Coast.  <a href="map.html">Maps</a>, <a href="globe.html">globe</a>, <a href="outcomes.html">outcomes</a>.
@@ -92,5 +98,8 @@
       </ul>
     </div>
     <div class="about"></div>
+    <script type="application/javascript">
+      PngRender.attach("#download")
+    </script>
   </body>
 </html>

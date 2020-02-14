@@ -14,6 +14,7 @@
     <script lang="javascript" src="./dist/moment.min.js"></script>
     <script lang="javascript" src="./dist/moment-strftime.js"></script>
     <script lang="javascript" src="./js/app.js?v=2020-02-01-01"></script>
+    <script lang="javascript" src="./js/png_render.js?v=2020-02-13-01"></script>
     <script lang="javascript" src="./js/queries.js?v=2020-02-01-01"></script>
 
     <script lang="javascript">
@@ -25,7 +26,7 @@
 
       const width = 1500
       const height = 1200
-      const margin = {top: 10, right: 20, bottom: 40, left: 150}
+      const margin = {top: 25, right: 20, bottom: 30, left: 150}
       const db = new Database(SETTINGS.db_path)
 
       const legend_width = 75
@@ -48,15 +49,53 @@
   </style>
   </head>
   <body>
-    <h2 style="line-height: 130%; text-align: center">2019-nCoV Outcomes</h2>
+    <h2 style="line-height: 130%; text-align: center">COVID-19 Outcomes</h2>
     <h3 style="line-height: 100%;"><span class="x-date"></span></h3>
     <div class="outcomes">
       <div class="container outcomes">
         <svg class="plot outcomes svg-content-responsive"></svg>
       </div>
+
+      <canvas class="png-canvas"></canvas>
+      <img class="png-img" />
+      <div class="png-download-container" style="margin-top: 48%;">
+        <a id="download">download png</a>
+      </div>
+
       <script type="application/javascript">
         const categories = ["unknown", "recovered", "deaths"]
 
+        function sars_outcomes_2002() {
+          // https://en.wikipedia.org/wiki/Severe_acute_respiratory_syndrome#Epidemiology
+          return {
+            locale: "2002 SARS (ex-China)",
+            confirmed: 2769,
+            deaths: 425,
+            recovered: 2769-425,
+            unknown: 0,
+          }
+        }
+        function flu_outcomes_2009() {
+          // https://en.wikipedia.org/wiki/2009_flu_pandemic_by_country
+          return {
+            locale: "2009 H1N1 Flu Pandemic",
+            confirmed: 6724149,
+            deaths: 19654,
+            recovered: 6724149 - 19654,
+            unknown: 0,
+          }
+        }
+
+        function flu_outcomes_us2019() {
+          // https://www.facebook.com/CDC/photos/a.184668026025/10157570169896026/?type=3
+          return {
+            locale: "2019 US Flu Season",
+            confirmed: 19000000,
+            deaths: 10000,
+            recovered: 19000000 - 10000,
+            unknown: 0,
+          }
+        }
         const x = d3.scaleLinear()
           .range([margin.left, width - margin.right])
 
@@ -67,6 +106,8 @@
         const svg = d3.select("svg.outcomes")
           .attr("viewBox", [0, 0, width, height])
           .style("overflow", "visible")
+          .append("g")
+          .classed("svg-outer", true)
 
         db.load_data()
           .then(() => {
@@ -74,7 +115,10 @@
             const date_caption = date.strftime("%d %B %Y %H:%M UTC-5")
             d3.selectAll(".x-date").text(date_caption)
 
-            const data = db.query(Queries.PROPORTIONS)
+            let data = db.query(Queries.PROPORTIONS)
+            data.unshift(flu_outcomes_us2019())
+            data.unshift(flu_outcomes_2009())
+            data.unshift(sars_outcomes_2002())
 
             y.domain(data.map(d => d.locale))
 
@@ -116,7 +160,7 @@
 
             svg.append("g").attr("class", "y axis y-axis").call(yAxis)
             svg.append("g").attr("class", "x axis x-axis").call(xAxis)
-            console.log(categories.map(color))
+
             let legend = svg.append("g")
               .attr("class", "legend")
               .attr("transform", `translate(${margin.left}, ${height - (margin.bottom/1.125)})`)
@@ -139,7 +183,48 @@
               .attr("y", legend_height / 2.5)
               .attr("x", legend_width / 2)
               .attr("text-anchor", "middle")
+
+              const touch_up = function(root, dimensions) {
+                const date = d3.select(".x-date").text()
+                const title_height = 100
+
+                root.select(".svg-outer")
+                  .style("transform", `translate(0px, ${title_height / 2}px)`)
+
+                root.insert("text")
+                  .classed("title", true)
+                  .style("font-family", "Avenir Next Condensed")
+                  .style("font-weight", "Regular")
+                  .style("font-size", "32px")
+                  .attr("y", legend_height / 15)
+                  .attr("text-anchor", "middle")
+                  .style("fill", "#1b191d")
+                root.select("text.title")
+                  .append("tspan")
+                  .text(`COVID-19 Outcomes`)
+                  .attr("x", (width + margin.left) / 2)
+                  .style("fill", "#1b191d")
+                root.select("text.title")
+                  .append("tspan")
+                  .attr("x", (width + margin.left) / 2)
+                  .attr("dy", "1.25em")
+                  .style("font-size", "24px")
+                  .style("fill", "#1b191d")
+                  .text(date)
+                root
+                  .style("text-rendering", "optimizeLegibility")
+              }
+
+              PngRender.render(
+                document.querySelector("svg"),
+                {
+                  height: 1500,
+                  width: 1200 * 1.4
+                },
+                (root, dimensions) => touch_up.call(this, root, dimensions)
+              )
           })
+          PngRender.attach("#download")
       </script>
   </body>
 </html>

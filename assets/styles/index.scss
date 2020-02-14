@@ -253,3 +253,26 @@ h2, h3 {
 @include meta.load-css("palette_china");
 @include meta.load-css("palette_global");
 @include meta.load-css("palette_sequential");
+
+// SVG to PNG rendering stuff
+.png-canvas {
+  display: none;
+  image-rendering: pixelated;
+}
+
+.png-img {
+  display: none;
+}
+
+.png-download-container {
+  cursor: pointer;
+  position: relative;
+  float: none;
+  width: 100%;
+  z-index: 99999;
+  bottom: 0;
+}
+
+#download {
+  z-index: 99999;
+}
