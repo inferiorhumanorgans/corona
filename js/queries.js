@@ -241,6 +241,18 @@ Queries.PROPORTIONS = `
       WHEN country IN ('TW', 'HK', 'MO') THEN iso_countries.name
       WHEN country = 'ZZ' THEN province
       WHEN province IS NULL THEN iso_countries.name
+      WHEN country = 'CA' AND province LIKE '%, ON' THEN
+          'Ontario, CA'
+      WHEN country = 'US' THEN
+          CASE
+            WHEN province = 'AZ' THEN 'Arizona, US'
+            WHEN province = 'CA' THEN 'California, US'
+            WHEN province = 'IL' THEN 'Illinois, US'
+            WHEN province = 'MA' THEN 'Massachusetts, US'
+            WHEN province = 'WA' THEN 'Washington, US'
+            WHEN province = 'WI' THEN 'Wisconsin, US'
+            ELSE province || ', ' || country
+          END
       ELSE province || ', ' || country
     END AS locale,
     country,
@@ -254,5 +266,5 @@ Queries.PROPORTIONS = `
     updated_at = (SELECT MAX(updated_at) FROM cases) AND
     iso_countries.alpha_2 = country
   GROUP BY country, province
-  ORDER BY iso_countries.name ASC, province ASC;
+  ORDER BY CASE WHEN iso_countries.alpha_2 = 'ZZ' THEN alpha_2 ELSE iso_countries.name END ASC, province ASC;
 `
