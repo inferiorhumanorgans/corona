@@ -240,6 +240,10 @@ h2, h3 {
   left: 0;
 }
 
+.chart.tooltip {
+  pointer-events: none;
+}
+
 .container.chart {
   display: inline-block;
   position: relative;

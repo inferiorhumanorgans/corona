@@ -1,5 +1,7 @@
-// .chart.tooltip {
-// }
+.chart.tooltip {
+  pointer-events: none;
+}
+
 .container.chart {
   display: inline-block;
   position: relative;

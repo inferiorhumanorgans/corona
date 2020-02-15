@@ -384,6 +384,11 @@ class StackedArea {
   }
 
   tooltip_handler(chart) {
+    chart.tooltip
+      .interrupt()
+      .style("display", null)
+      .style("visibility", "hidden")
+
     let bisectDate = chart.bisectDate;
     // https://bl.ocks.org/alandunning/cfb7dcd7951826b9eacd54f0647f48d3
     let actual_date = chart.x.invert(d3.mouse(this)[0])
@@ -411,23 +416,23 @@ class StackedArea {
         return `Total: ${formatNumber(series_total)}`
       })
 
-    // chart.tooltip
-    // .interrupt()
-    // .style("left", 0)
-
     chart.tooltip.select(".tooltip_updated_at").text(datum.x_label)
 
-    let bounds = chart.tooltip.node().getBoundingClientRect();
+    const bounds = chart.tooltip.node().getBoundingClientRect();
+    const pageX = d3.event.pageX;
+    const pageY = d3.event.pageY;
 
-    let pageX = d3.event.pageX;
-    let pageY = d3.event.pageY;
-    let xPos = pageX + 10;
+    let xPos = pageX;
     let yPos;
 
     if ((5 + pageY + bounds.height) > window.innerHeight) {
       yPos = window.innerHeight - 10 - bounds.height
     } else {
       yPos = 5 + pageY
+    }
+
+    if ((xPos + bounds.width) >= window.innerWidth) {
+      xPos -= bounds.width
     }
 
     chart.tooltip
@@ -437,8 +442,6 @@ class StackedArea {
       .style("opacity", 1)
       .style("top", `${yPos}px`)
       .style("left", `${xPos}px`)
-
-    chart.tooltip.style("visibility", "visible")
   }
 
   set_profile(db, profile) {
