@@ -249,6 +249,7 @@ Queries.PROPORTIONS = `
             WHEN province = 'CA' THEN 'California, US'
             WHEN province = 'IL' THEN 'Illinois, US'
             WHEN province = 'MA' THEN 'Massachusetts, US'
+            WHEN province = 'TX' THEN 'Texas, US'
             WHEN province = 'WA' THEN 'Washington, US'
             WHEN province = 'WI' THEN 'Wisconsin, US'
             ELSE province || ', ' || country
