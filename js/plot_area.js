@@ -121,7 +121,7 @@ class StackedArea {
         })
         .y0(function(d) { return self.y(d[0]) })
         .y1(function(d) { return self.y(d[1]) })
-        .curve(d3.curveCardinal.tension(0.65))
+        .curve(d3.curveMonotoneX)
 
       this.svg.selectAll(".area")
         .data(stacked)
