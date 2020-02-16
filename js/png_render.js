@@ -189,7 +189,7 @@ class PngRender {
     const canvas = PngRender.canvas()
     const dt = canvas.toDataURL("image/png")
 
-    // this.download = filename
+    this.download = filename
     this.href = dt
   }
 }

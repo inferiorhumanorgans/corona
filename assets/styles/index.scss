@@ -265,14 +265,10 @@ h2, h3 {
 }
 
 .png-download-container {
-  cursor: pointer;
-  position: relative;
-  float: none;
-  width: 100%;
-  z-index: 99999;
-  bottom: 0;
+
 }
 
 #download {
+  cursor: pointer;
   z-index: 99999;
 }

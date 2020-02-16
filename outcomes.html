@@ -223,7 +223,18 @@
                 },
                 (root, dimensions) => touch_up.call(this, root, dimensions)
               )
+
+            const title = `COVID-19 Estimated Case Outcomes as of ${d3.select(".x-date").text().replace(/:/g, "H")}`
+            d3.select("#download").attr("data-title", title)
+            d3.select("#download")
+              .style("pointer-events", null)
+              .style("text-decoration", null)
           })
+
+          d3.select("#download")
+            .style("pointer-events", "none")
+            .style("text-decoration", "none")
+
           PngRender.attach("#download")
       </script>
   </body>

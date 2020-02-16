@@ -14,10 +14,36 @@
     <script lang="javascript" src="./js/plot_area.js?v=2020-02-02-01"></script>
 
     <link rel="stylesheet" type="text/css" href = "styles.css?v=2020-02-01" />
+  </head>
+  <body class="chart">
+    <div>
+      <div class="container chart">
+        <svg class="plot chart svg-content-responsive"></svg>
+      </div>
+    </div>
+
+    <canvas class="png-canvas"></canvas>
+    <img class="png-img" />
+
+    <p>
+      Data sourced from Johns Hopkins University's <a href="https://systems.jhu.edu/" target="_blank">Center for Systems Science and Engineering</a>.
+      All times local to U.S. East Coast.  <a href="map.html">Maps</a>, <a href="globe.html">globe</a>, <a href="outcomes.html">outcomes</a>.
+      Hit <span onclick="toggle_about()" class="about-link">?</span> for more info.
+      <span class="png-download-container">
+        Download <a id="download">png</a>.
+      </span>
+    </p>
+    <div class="chart tooltip">
+      <span class="tooltip-header">As of <span class="tooltip_updated_at"></span>:</span><br>
+      <ul class="tooltip_series">
+      </ul>
+    </div>
+    <div class="about"></div>
 
     <script lang="javascript">
       function toggle_region(event) {
         const defaults = { name: "china", category: "confirmed" }
+
         let name
 
         switch (chart.profile.name) {
@@ -62,6 +88,12 @@
         db_path: './data/nCoV.sqlite3?v=2020-02-15T04-00',
       }
 
+      d3.select("#download")
+        .style("pointer-events", "none")
+        .style("text-decoration", "none")
+
+      PngRender.attach("#download")
+
       let db = new Database(SETTINGS.db_path)
       let chart;
 
@@ -73,33 +105,10 @@
 
         chart.set_profile(db, { name: "china", category: "confirmed"})
         chart.draw()
+        d3.select("#download")
+          .style("pointer-events", null)
+          .style("text-decoration", null)
       })
-    </script>
-  </head>
-  <body class="chart">
-    <div>
-      <div class="container chart">
-        <svg class="plot chart svg-content-responsive"></svg>
-      </div>
-    </div>
-    <canvas class="png-canvas"></canvas>
-    <img class="png-img" />
-    <div class="png-download-container">
-      <a id="download">download png</a>
-    </div>
-    <p>
-      Data sourced from Johns Hopkins University's <a href="https://systems.jhu.edu/" target="_blank">Center for Systems Science and Engineering</a>.
-      All times local to U.S. East Coast.  <a href="map.html">Maps</a>, <a href="globe.html">globe</a>, <a href="outcomes.html">outcomes</a>.
-      Hit <span onclick="toggle_about()" class="about-link">?</span> for more info.
-    </p>
-    <div class="chart tooltip">
-      <span class="tooltip-header">As of <span class="tooltip_updated_at"></span>:</span><br>
-      <ul class="tooltip_series">
-      </ul>
-    </div>
-    <div class="about"></div>
-    <script type="application/javascript">
-      PngRender.attach("#download")
     </script>
   </body>
 </html>
