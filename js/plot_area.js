@@ -497,7 +497,6 @@ class StackedArea {
   }
 
   constructor() {
-    this.raster_area_opacity = 0.95
     this.raster_legend_height = 15
     this.raster_small_font_size = "10px"
     this.raster_legend_swatch = { width: "2.5em", height: "1em" }

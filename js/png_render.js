@@ -194,5 +194,6 @@ class PngRender {
   }
 }
 
+PngRender.raster_area_opacity = 0.95
 // static black = "black"
 PngRender.black = "#1b191d"
