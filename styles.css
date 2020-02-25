@@ -170,11 +170,10 @@ a:hover {
 }
 
 /* Be kinder to mobile devices */
-@media (max-width: 450px) {
-  .tick {
-    font-size: 6pt;
-  }
+.tick {
+  font-size: 6pt;
 }
+
 .toggle {
   text-decoration: underline;
   cursor: pointer;

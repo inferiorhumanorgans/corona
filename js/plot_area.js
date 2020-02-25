@@ -90,7 +90,7 @@ class StackedArea {
 
     // Draw X-axis
     let xAxis = d3.axisBottom(this.x)
-      .tickArguments([d3.timeHour.every(24)])
+      // .tickArguments([d3.timeHour.every(24)])
       .tickFormat(function(d) {
         let date = moment(d)
         // return date.strftime("%b %d %H:%M");
