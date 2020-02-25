@@ -13,13 +13,16 @@ raw_outfile = File.join(ENV['HOME'], "corona", now.strftime("%Y-%m-%dT%H-%M-adj.
 # Account for JHU using local east coast time instead of UTC :(
 now = (now + (3/24.0)).strftime("%Y-%m-%dT%H:%MZ")
 
+puts INFILE.inspect if ENV['DEBUG']
+
 f = URI.open(INFILE)
 raw_data = f.read
 data = JSON.parse(raw_data)
 
 #STDERR.puts "Outfile: #{outfile}"
 
-# Handle the somewhat arbitrary naming convention JHU picked
+# data = JSON.parse(File.read('out-last.json'))
+
 # https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes
 def get_country_code(country, province)
   case country
@@ -94,13 +97,44 @@ def get_country_code(country, province)
     return "SE"
   when /Spain/i
     return "ES"
+  when /Belgium/i
+    return "BE"
+  when /Others/i
+    return "ZZ"
+  when /Egypt/i
+    return "EG"
+  when /Diamond Princess/i
+    return "ZZ"
+  when /Iran/i
+    return "IR"
+  when /Israel/i
+    return "IL"
+  when /Lebanon/i
+    return "LB"
+  when /Iraq/i
+    return "IQ"
+  when /Kuwait/i
+    return "KW"
+  when /Oman/i
+    return "OM"
+  when /Afghanistan/i
+    return "AF"
+  when /Bahrain/i
+    return "BH"
+  when /Austria/i
+    return "AT"
+  when /Croatia/i
+    return "HR"
+  when /Switzerland/i
+    return "CH"
+  when /Algeria/i
+    return "DZ"
   else
     STDERR.puts "Warning: couldn't identify #{country}"
     return country
   end
 end
 
-# TODO: Do a proper SQL escape
 def esc(s)
   return "'#{s.gsub("'", "''")}'"
 end
@@ -141,8 +175,10 @@ File.open(outfile, 'w+') do |f|
 
     country = row[:country]
     country = country.nil? ? "NULL": esc(get_country_code(country, row[:province]))
+    if row[:country] =~ /Diamond Princess/i
+      province = "'\"Diamond Princess\" cruise ship'"
+    end
 
-    # Apparently we have quasi-city precision now
     if province.include?(",") and country == "'US'"
       (city, province) = row[:province].split(",", 2).map{|x| x.strip}
       province = province.nil? ? "NULL" : esc(province)
