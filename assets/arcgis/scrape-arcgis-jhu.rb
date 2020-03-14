@@ -341,6 +341,24 @@ def get_country_code(country, province)
     return "UY"
   when /Puerto Rico/i
     return "US"
+  when /Suriname/i
+    return "SR"
+  when /Saint Vincent and the Grenadines/i
+    return "VC"
+  when /Saint Lucia/i
+    return "LC"
+  when /Rwanda/i
+    return "RW"
+  when /Mauritania/i
+    return "MR"
+  when /Eswatini/i
+    return "SZ"
+  when /Curacao/i
+    return "CW"
+  when /Namibia/i
+    return "NA"
+  when "Jersey"
+    return "JE"
   else
     STDERR.puts "Warning: couldn't identify #{country}"
     return country
