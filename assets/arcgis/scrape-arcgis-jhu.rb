@@ -77,7 +77,7 @@ def get_country_code(country, province)
     return "KH"
   when /Sri Lanka/i
     return "LK"
-  when /Ivory Coast/i
+  when /(Cote d'Ivoire|Ivory Coast)/i
     return "CI"
   when /Germany/i
     return "DE"
@@ -99,7 +99,7 @@ def get_country_code(country, province)
     return "ES"
   when /Belgium/i
     return "BE"
-  when /Others/i
+  when /(Other|Others)/i
     return "ZZ"
   when /Egypt/i
     return "EG"
@@ -129,6 +129,210 @@ def get_country_code(country, province)
     return "CH"
   when /Algeria/i
     return "DZ"
+  when /Pakistan/i
+    return "PK"
+  when /Georgia/i
+    return "GE"
+  when /Greece/i
+    return "GR"
+  when /North Macedonia/i
+    return "MK"
+  when /Norway/i
+    return "NO"
+  when /Denmark/i
+    return "DK"
+  when /Estonia/i
+    return "EE"
+  when /Netherlands/i
+    return "NL"
+  when /San Marino/i
+    return "SM"
+  when /Belarus/i
+    return "BY"
+  when /Lithuania/i
+    return "LT"
+  when /New Zealand/i
+    return "NZ"
+  when /Nigeria/
+    return "NG"
+  when /North Ireland/i
+    return "GB"
+  when /Azerbaijan/i
+    return "AZ"
+  when /Iceland/i
+    return "IS"
+  when /Monaco/i
+    return "MC"
+  when /Ireland/i
+    return "IE"
+  when /Luxembourg/i
+    return "LU"
+  when /Qatar/i
+    return "QA"
+  when /Ecuador/i
+    return "EC"
+  when /Dominican Republic/i
+    return "DO"
+  when /Armenia/i
+    return "AM"
+  when /Indonesia/i
+    return "ID"
+  when /Czech Republic/i
+    return "CZ"
+  when /Portugal/i
+    return "PT"
+  when /Andorra/i
+    return "AD"
+  when /Latvia/i
+    return "LV"
+  when /Morocco/i
+    return "MA"
+  when /Saudi Arabia/i
+    return "SA"
+  when /Senegal/i
+    return "SN"
+  when /Jordan/i
+    return "JO"
+  when /Argentina/i
+    return "AR"
+  when /Chile/i
+    return "CL"
+  when /Palestine/i
+    return "PS"
+  when /Saint Barthelemy/i
+    return "BL"
+  when /Bosnia and Herzegovina/i
+    return "BA"
+  when /Hungary/i
+    return "HU"
+  when /Slovenia/i
+    return "SI"
+  when /Faroe Islands/i
+    return "FO"
+  when /Gibraltar/i
+    return "GI"
+  when /Liechtenstein/i
+    return "LI"
+  when /Poland/i
+    return "PL"
+  when /South Africa/i
+    return "ZA"
+  when /Tunisia/i
+    return "TN"
+  when /Bhutan/i
+    return "BT"
+  when /Costa Rica/i
+    return "CR"
+  when /(Fench|French) Guiana/i
+    return "GF"
+  when /Martinique/i
+    return "MQ"
+  when /Cameroon/i
+    return "CM"
+  when /Peru/i
+    return "PE"
+  when /Serbia/i
+    return "RS"
+  when /Slovakia/i
+    return "SK"
+  when /Togo/i
+    return "TG"
+  when /(Holy See|Vatican City)/i
+    return "VA"
+  when /Malta/i
+    return "MT"
+  when /Paraguay/i
+    return "PY"
+  when /Bulgaria/i
+    return "BG"
+  when /Bangladesh/i
+    return "BD"
+  when /Maldives/i
+    return "MV"
+  when /Moldova/i
+    return "MD"
+  when /Albania/i
+    return "AL"
+  when /(St\. Martin|Saint Martin)/i
+    return "MF"
+  when /Republic of Korea/i
+    return "KP"
+  when /Taipei and environs/i
+    return "TW"
+  when /occupied Palestinian territory/i
+    return "PS"
+  when /Cyprus/i
+    return "CY"
+  when /Brunei/i
+    return "BN"
+  when /Burkina Faso/i
+    return "BF"
+  when /Channel Islands/i
+    return "GB"
+  when /Mongolia/i
+    return "MN"
+  when /Panama/i
+    return "PA"
+  when /Bolivia/i
+    return "BO"
+  when /Turkey/i
+    return "TR"
+  when /Jamaica/i
+    return "JM"
+  when /Korea, South/i
+    return "KR"
+  when /"Korea; South"/i
+    return "KR"
+  when /United Kingdom/i
+    return "GB"
+  when /Czechia/i
+    return "CZ"
+  when /Honduras/i
+    return "HN"
+  when /Congo \(Kinshasa\)/i
+    return "CD"
+  when /Democratic Republic of the Congo/i
+    return "CD"
+  when /Cruise Ship/i
+    return "ZZ"
+  when /Reunion/i
+    return "RE"
+  when /Cuba/i
+    return "CU"
+  when /Kazakhstan/i
+    return "KZ"
+  when /Aruba/i
+    return "AW"
+  when /Ghana/i
+    return "GH"
+  when /Antigua and Barbuda/i
+    return "AG"
+  when /Cayman Islands/i
+    return "KY"
+  when /Ethiopia/i
+    return "ET"
+  when /French Polynesia/i
+    return "PF"
+  when /Gabon/i
+    return "GA"
+  when /Guadeloupe/i
+    return "GP"
+  when /Guernsey/i
+    return "GG"
+  when /Papua New Guinea/i
+    return "PG"
+  when "Guinea"
+    return "GN"
+  when /Guyana/i
+    return "GY"
+  when /Kenya/i
+    return "KE"
+  when /South Sudan/i
+    return "SS"
+  when "Sudan"
+    return "SD"
+  when /Trinidad and Tobago/i
+    return "TT"
   else
     STDERR.puts "Warning: couldn't identify #{country}"
     return country
@@ -177,6 +381,22 @@ File.open(outfile, 'w+') do |f|
     country = country.nil? ? "NULL": esc(get_country_code(country, row[:province]))
     if row[:country] =~ /Diamond Princess/i
       province = "'\"Diamond Princess\" cruise ship'"
+    end
+
+    if row[:country] =~ /North Ireland/
+      province = "'North Ireland'"
+    end
+
+    if row[:country] =~ /Taipei and environs/
+      province = "'Taipei'"
+    end
+
+    if row[:country] =~ /Channel Islands/
+      province = "'Channel Islands'"
+    end
+
+    if row[:country] =~ /Cruise Ship/i
+      province = "'Cruise Ship'"
     end
 
     if province.include?(",") and country == "'US'"
