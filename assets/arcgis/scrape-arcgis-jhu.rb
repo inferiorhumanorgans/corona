@@ -333,6 +333,14 @@ def get_country_code(country, province)
     return "SD"
   when /Trinidad and Tobago/i
     return "TT"
+  when /Venezuela/i
+    return "VE"
+  when /Guatemala/i
+    return "GT"
+  when /Uruguay/i
+    return "UY"
+  when /Puerto Rico/i
+    return "US"
   else
     STDERR.puts "Warning: couldn't identify #{country}"
     return country
@@ -397,6 +405,10 @@ File.open(outfile, 'w+') do |f|
 
     if row[:country] =~ /Cruise Ship/i
       province = "'Cruise Ship'"
+    end
+
+    if row[:country] =~ /Puerto Rico/i
+      province = "'Puerto Rico'"
     end
 
     if province.include?(",") and country == "'US'"
